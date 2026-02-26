@@ -9,6 +9,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -31,85 +33,90 @@ class ComposeEmailForm
             ->mapWithKeys(fn (array $s): array => [$s['address'] => "{$s['name']} <{$s['address']}>"])
             ->all();
 
-        return $form->schema([
+        return $form
+            ->columns(3)
+            ->components([
+                Group::make()
+                    ->columns(1)
+                    ->columnSpan(['lg' => 2])
+                    ->schema([
+                        Section::make(__('fin-mail::fin-mail.compose.sections.recipients'))
+                            ->icon(Heroicon::OutlinedUserGroup)
+                            ->schema([
+                                Select::make('from')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.from'))
+                                    ->options($senders)
+                                    ->native(false)
+                                    ->required(),
 
-            Section::make(__('fin-mail::fin-mail.compose.sections.recipients'))
-                ->icon(Heroicon::OutlinedUserGroup)
+                                TagsInput::make('to')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.to'))
+                                    ->placeholder(__('fin-mail::fin-mail.compose.fields.to_placeholder'))
+                                    ->required()
+                                    ->nestedRecursiveRules(['email']),
+
+                                TagsInput::make('cc')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.cc'))
+                                    ->placeholder(__('fin-mail::fin-mail.compose.fields.cc_placeholder'))
+                                    ->nestedRecursiveRules(['email']),
+
+                                TagsInput::make('bcc')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.bcc'))
+                                    ->placeholder(__('fin-mail::fin-mail.compose.fields.bcc_placeholder'))
+                                    ->nestedRecursiveRules(['email']),
+                            ])
+                            ->columns(2)
+                            ->collapsible(),
+                        Section::make(__('fin-mail::fin-mail.compose.sections.content'))
+                            ->icon(Heroicon::OutlinedDocumentText)
+                            ->schema([
+                                TextInput::make('subject')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->columnSpanFull(),
+
+                                TextInput::make('preheader')
+                                    ->maxLength(255)
+                                    ->helperText(__('fin-mail::fin-mail.compose.fields.preheader_helper'))
+                                    ->columnSpanFull(),
+
+                                $editor->make('body')
+                                    ->required(),
+                            ]),
+                    ]),
+
+            Group::make()
+                ->columnSpan(['lg' => 1])
                 ->schema([
-                    Select::make('from')
-                        ->label(__('fin-mail::fin-mail.compose.fields.from'))
-                        ->options($senders)
-                        ->native(false)
-                        ->required(),
+                        Section::make(__('fin-mail::fin-mail.compose.sections.attachments'))
+                            ->icon(Heroicon::OutlinedPaperClip)
+                            ->schema([
+                                FileUpload::make('attachments')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.attach_files'))
+                                    ->multiple()
+                                    ->disk(config('fin-mail.attachments_disk', 'local'))
+                                    ->directory('email-attachments')
+                                    ->maxSize(app(AttachmentSettings::class)->max_size_mb * 1024)
+                                    ->columnSpanFull(),
+                            ]),
 
-                    TagsInput::make('to')
-                        ->label(__('fin-mail::fin-mail.compose.fields.to'))
-                        ->placeholder(__('fin-mail::fin-mail.compose.fields.to_placeholder'))
-                        ->required()
-                        ->nestedRecursiveRules(['email']),
+                        Section::make(__('fin-mail::fin-mail.compose.sections.tokens'))
+                            ->icon(Heroicon::OutlinedCodeBracket)
+                            ->schema([
+                                TextEntry::make('tokens_info')
+                                    ->bulleted()
+                                    ->state(function () use ($record): array {
+                                        $tokens = $record->token_schema ?? [];
+                                        if (empty($tokens)) {
+                                            return [__('fin-mail::fin-mail.compose.fields.no_tokens')];
+                                        }
 
-                    TagsInput::make('cc')
-                        ->label(__('fin-mail::fin-mail.compose.fields.cc'))
-                        ->placeholder(__('fin-mail::fin-mail.compose.fields.cc_placeholder'))
-                        ->nestedRecursiveRules(['email']),
-
-                    TagsInput::make('bcc')
-                        ->label(__('fin-mail::fin-mail.compose.fields.bcc'))
-                        ->placeholder(__('fin-mail::fin-mail.compose.fields.bcc_placeholder'))
-                        ->nestedRecursiveRules(['email']),
-                ])
-                ->columns(2)
-                ->collapsible(),
-
-            Section::make(__('fin-mail::fin-mail.compose.sections.content'))
-                ->icon(Heroicon::OutlinedDocumentText)
-                ->schema([
-                    TextInput::make('subject')
-                        ->required()
-                        ->maxLength(255)
-                        ->columnSpanFull(),
-
-                    TextInput::make('preheader')
-                        ->maxLength(255)
-                        ->helperText(__('fin-mail::fin-mail.compose.fields.preheader_helper'))
-                        ->columnSpanFull(),
-
-                    $editor->make('body')
-                        ->required(),
+                                        return collect($tokens)
+                                            ->map(fn (array $t): string => "{{ {$t['token']} }} — {$t['description']}".($t['example'] ?? false ? " (e.g., {$t['example']})" : ''))
+                                            ->all();
+                                    }),
+                            ]),
                 ]),
-
-            Section::make(__('fin-mail::fin-mail.compose.sections.attachments'))
-                ->icon(Heroicon::OutlinedPaperClip)
-                ->schema([
-                    FileUpload::make('attachments')
-                        ->label(__('fin-mail::fin-mail.compose.fields.attach_files'))
-                        ->multiple()
-                        ->disk(config('fin-mail.attachments_disk', 'local'))
-                        ->directory('email-attachments')
-                        ->maxSize(app(AttachmentSettings::class)->max_size_mb * 1024)
-                        ->columnSpanFull(),
-                ])
-                ->collapsible()
-                ->collapsed(),
-
-            Section::make(__('fin-mail::fin-mail.compose.sections.tokens'))
-                ->icon(Heroicon::OutlinedCodeBracket)
-                ->schema([
-                    TextEntry::make('tokens_info')
-                        ->state(function () use ($record): string {
-                            $tokens = $record->token_schema ?? [];
-                            if (empty($tokens)) {
-                                return __('fin-mail::fin-mail.compose.fields.no_tokens');
-                            }
-
-                            return collect($tokens)
-                                ->map(fn (array $t): string => "**{{ {$t['token']} }}** — {$t['description']}".($t['example'] ?? false ? " (e.g., {$t['example']})" : ''))
-                                ->implode("\n\n");
-                        }),
-                ])
-                ->collapsible()
-                ->collapsed(),
-
         ])->statePath('data');
     }
 }
