@@ -14,6 +14,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Contracts\EditorContract;
 use FinityLabs\FinMail\Enums\TemplateCategory;
 use FinityLabs\FinMail\Settings\MailSettings;
@@ -30,7 +31,7 @@ class EmailTemplateForm
                 ->tabs([
 
                     Tab::make(__('fin-mail::fin-mail.template.tabs.content'))
-                        ->icon('heroicon-o-document-text')
+                        ->icon(Heroicon::OutlinedDocumentText)
                         ->schema([
                             TextInput::make('name')
                                 ->required()
@@ -67,7 +68,7 @@ class EmailTemplateForm
                         ]),
 
                     Tab::make(__('fin-mail::fin-mail.template.tabs.settings'))
-                        ->icon('heroicon-o-cog-6-tooth')
+                        ->icon(Heroicon::OutlinedCog6Tooth)
                         ->schema([
                             Grid::make(2)->schema([
                                 Select::make('email_theme_id')
@@ -104,7 +105,7 @@ class EmailTemplateForm
                         ]),
 
                     Tab::make(__('fin-mail::fin-mail.template.tabs.tokens'))
-                        ->icon('heroicon-o-code-bracket')
+                        ->icon(Heroicon::OutlinedCodeBracket)
                         ->schema([
                             Repeater::make('token_schema')
                                 ->label(__('fin-mail::fin-mail.template.tokens.label'))

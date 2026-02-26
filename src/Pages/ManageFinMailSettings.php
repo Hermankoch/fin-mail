@@ -16,6 +16,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Enums\NavigationGroup;
 use FinityLabs\FinMail\Settings\AttachmentSettings;
 use FinityLabs\FinMail\Settings\BrandingSettings;
@@ -29,7 +30,7 @@ class ManageFinMailSettings extends SettingsPage
 
     protected static string|UnitEnum|null $navigationGroup = NavigationGroup::Email;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
     protected static ?int $navigationSort = 10;
 
@@ -96,7 +97,7 @@ class ManageFinMailSettings extends SettingsPage
     protected function mailTab(): Tab
     {
         return Tab::make(__('fin-mail::fin-mail.settings.tabs.general'))
-            ->icon('heroicon-o-envelope')
+            ->icon(Heroicon::OutlinedEnvelope)
             ->schema([
                 Section::make(__('fin-mail::fin-mail.settings.sections.default_sender'))
                     ->description(__('fin-mail::fin-mail.settings.sections.default_sender_description'))
@@ -195,7 +196,7 @@ class ManageFinMailSettings extends SettingsPage
     protected function brandingTab(): Tab
     {
         return Tab::make(__('fin-mail::fin-mail.settings.tabs.branding'))
-            ->icon('heroicon-o-paint-brush')
+            ->icon(Heroicon::OutlinedPaintBrush)
             ->statePath('brandingData')
             ->schema([
                 Section::make(__('fin-mail::fin-mail.settings.sections.logo'))
@@ -276,7 +277,7 @@ class ManageFinMailSettings extends SettingsPage
     protected function loggingTab(): Tab
     {
         return Tab::make(__('fin-mail::fin-mail.settings.tabs.logging'))
-            ->icon('heroicon-o-document-magnifying-glass')
+            ->icon(Heroicon::OutlinedDocumentMagnifyingGlass)
             ->statePath('loggingData')
             ->schema([
                 Section::make(__('fin-mail::fin-mail.settings.sections.logging'))
@@ -304,7 +305,7 @@ class ManageFinMailSettings extends SettingsPage
     protected function attachmentTab(): Tab
     {
         return Tab::make(__('fin-mail::fin-mail.settings.tabs.attachments'))
-            ->icon('heroicon-o-paper-clip')
+            ->icon(Heroicon::OutlinedPaperClip)
             ->statePath('attachmentData')
             ->schema([
                 Section::make(__('fin-mail::fin-mail.settings.sections.attachment_rules'))

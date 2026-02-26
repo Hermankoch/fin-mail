@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Shared form builder for the compose email flow.
- * Used by both SendEmailAction (page/header) and SendEmailTableAction (table row).
+ * Used by SendEmailAction and the ComposeEmail page.
  */
 class ComposeFormBuilder
 {

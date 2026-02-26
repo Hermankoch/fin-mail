@@ -14,6 +14,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -81,7 +82,7 @@ class EmailTemplatesTable
 
                     Action::make('preview')
                         ->label(__('fin-mail::fin-mail.template.actions.preview'))
-                        ->icon('heroicon-o-eye')
+                        ->icon(Heroicon::OutlinedEye)
                         ->modal()
                         ->modalHeading(fn ($record): string => "Preview: {$record->name}")
                         ->modalContent(fn ($record) => view('fin-mail::components.email-preview', [
@@ -92,7 +93,7 @@ class EmailTemplatesTable
 
                     Action::make('send_test')
                         ->label(__('fin-mail::fin-mail.template.actions.send_test'))
-                        ->icon('heroicon-o-paper-airplane')
+                        ->icon(Heroicon::OutlinedPaperAirplane)
                         ->modal()
                         ->schema([
                             TextInput::make('test_email')
@@ -126,7 +127,7 @@ class EmailTemplatesTable
 
                     Action::make('compose')
                         ->label(__('fin-mail::fin-mail.template.actions.compose'))
-                        ->icon('heroicon-o-pencil-square')
+                        ->icon(Heroicon::OutlinedPencilSquare)
                         ->url(fn ($record): string => EmailTemplateResource::getUrl('compose', ['record' => $record])),
 
                     DeleteAction::make(),

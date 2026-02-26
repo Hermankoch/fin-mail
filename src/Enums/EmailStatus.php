@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace FinityLabs\FinMail\Enums;
 
+use BackedEnum;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
+use Filament\Support\Icons\Heroicon;
 
 enum EmailStatus: int implements HasColor, HasIcon, HasLabel
 {
@@ -30,13 +32,13 @@ enum EmailStatus: int implements HasColor, HasIcon, HasLabel
         };
     }
 
-    public function getIcon(): ?string
+    public function getIcon(): string|BackedEnum|null
     {
         return match ($this) {
-            self::Draft => 'heroicon-o-pencil-square',
-            self::Queued => 'heroicon-o-clock',
-            self::Sent => 'heroicon-o-check-circle',
-            self::Failed => 'heroicon-o-x-circle',
+            self::Draft => Heroicon::OutlinedPencilSquare,
+            self::Queued => Heroicon::OutlinedClock,
+            self::Sent => Heroicon::OutlinedCheckCircle,
+            self::Failed => Heroicon::OutlinedXCircle,
         };
     }
 }

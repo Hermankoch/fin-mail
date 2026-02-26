@@ -8,6 +8,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -79,7 +80,7 @@ class SentEmailsTable
             ->recordActions([
                 Action::make('view')
                     ->label(__('fin-mail::fin-mail.sent.actions.view'))
-                    ->icon('heroicon-o-eye')
+                    ->icon(Heroicon::OutlinedEye)
                     ->modal()
                     ->modalHeading(fn ($record): string => $record->subject)
                     ->modalContent(fn ($record) => view('fin-mail::components.sent-email-detail', [
@@ -90,7 +91,7 @@ class SentEmailsTable
 
                 Action::make('resend')
                     ->label(__('fin-mail::fin-mail.sent.actions.resend'))
-                    ->icon('heroicon-o-arrow-path')
+                    ->icon(Heroicon::OutlinedArrowPath)
                     ->requiresConfirmation()
                     ->modalDescription(__('fin-mail::fin-mail.sent.actions.resend_description'))
                     ->action(function ($record): void {

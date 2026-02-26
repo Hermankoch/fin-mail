@@ -10,6 +10,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
 use FinityLabs\FinMail\Settings\MailSettings;
 
@@ -81,12 +82,12 @@ class EditEmailTemplate extends EditRecord
                     )->values()->all()
             )
                 ->label(fn (): string => __('fin-mail::fin-mail.template.language_label', ['locale' => strtoupper($this->activeLocale)]))
-                ->icon('heroicon-o-language')
+                ->icon(Heroicon::OutlinedLanguage)
                 ->button(),
 
             Action::make('preview')
                 ->label(__('fin-mail::fin-mail.template.actions.preview'))
-                ->icon('heroicon-o-eye')
+                ->icon(Heroicon::OutlinedEye)
                 ->modal()
                 ->modalHeading(fn (): string => __('fin-mail::fin-mail.template.actions.preview').": {$this->record->name}")
                 ->modalContent(fn () => view('fin-mail::components.email-preview', [
@@ -97,12 +98,12 @@ class EditEmailTemplate extends EditRecord
 
             Action::make('compose')
                 ->label(__('fin-mail::fin-mail.template.actions.compose'))
-                ->icon('heroicon-o-paper-airplane')
+                ->icon(Heroicon::OutlinedPaperAirplane)
                 ->url(fn (): string => static::getResource()::getUrl('compose', ['record' => $this->record])),
 
             Action::make('version_history')
                 ->label(__('fin-mail::fin-mail.template.actions.version_history'))
-                ->icon('heroicon-o-clock')
+                ->icon(Heroicon::OutlinedClock)
                 ->modal()
                 ->modalHeading(__('fin-mail::fin-mail.template.actions.version_history'))
                 ->modalContent(fn () => view('fin-mail::components.version-history', [

@@ -7,10 +7,13 @@ namespace FinityLabs\FinMail\Actions;
 use Closure;
 use Filament\Actions\Action;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Reusable Filament action to compose and send emails from any resource.
+ *
+ * Works as a page/header action, table row action, or anywhere Filament actions are used.
  *
  * Usage:
  *   SendEmailAction::make()
@@ -45,14 +48,14 @@ class SendEmailAction extends Action
 
         $this
             ->label(__('fin-mail::fin-mail.send_action.label'))
-            ->icon('heroicon-o-paper-airplane')
+            ->icon(Heroicon::OutlinedPaperAirplane)
             ->modal()
             ->modalHeading(__('fin-mail::fin-mail.send_action.modal_heading'))
             ->modalWidth(Width::FiveExtraLarge)
             ->modalSubmitActionLabel(__('fin-mail::fin-mail.send_action.submit'))
             ->form(fn (?Model $record): array => $this->getComposeForm($record))
             ->action(fn (array $data, ?Model $record): mixed => $this->sendEmail($data, $record))
-            ->modalIcon('heroicon-o-envelope');
+            ->modalIcon(Heroicon::OutlinedEnvelope);
     }
 
     /*

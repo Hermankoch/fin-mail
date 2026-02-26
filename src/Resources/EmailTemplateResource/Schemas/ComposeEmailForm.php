@@ -11,6 +11,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Contracts\EditorContract;
 use FinityLabs\FinMail\Models\EmailTemplate;
 use FinityLabs\FinMail\Settings\AttachmentSettings;
@@ -33,7 +34,7 @@ class ComposeEmailForm
         return $form->schema([
 
             Section::make(__('fin-mail::fin-mail.compose.sections.recipients'))
-                ->icon('heroicon-o-user-group')
+                ->icon(Heroicon::OutlinedUserGroup)
                 ->schema([
                     Select::make('from')
                         ->label(__('fin-mail::fin-mail.compose.fields.from'))
@@ -61,7 +62,7 @@ class ComposeEmailForm
                 ->collapsible(),
 
             Section::make(__('fin-mail::fin-mail.compose.sections.content'))
-                ->icon('heroicon-o-document-text')
+                ->icon(Heroicon::OutlinedDocumentText)
                 ->schema([
                     TextInput::make('subject')
                         ->required()
@@ -78,7 +79,7 @@ class ComposeEmailForm
                 ]),
 
             Section::make(__('fin-mail::fin-mail.compose.sections.attachments'))
-                ->icon('heroicon-o-paper-clip')
+                ->icon(Heroicon::OutlinedPaperClip)
                 ->schema([
                     FileUpload::make('attachments')
                         ->label(__('fin-mail::fin-mail.compose.fields.attach_files'))
@@ -92,7 +93,7 @@ class ComposeEmailForm
                 ->collapsed(),
 
             Section::make(__('fin-mail::fin-mail.compose.sections.tokens'))
-                ->icon('heroicon-o-code-bracket')
+                ->icon(Heroicon::OutlinedCodeBracket)
                 ->schema([
                     TextEntry::make('tokens_info')
                         ->state(function () use ($record): string {

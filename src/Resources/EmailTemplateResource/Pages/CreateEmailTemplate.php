@@ -7,6 +7,7 @@ namespace FinityLabs\FinMail\Resources\EmailTemplateResource\Pages;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
 use FinityLabs\FinMail\Settings\MailSettings;
 
@@ -51,7 +52,7 @@ class CreateEmailTemplate extends CreateRecord
                     )->values()->all()
             )
                 ->label(fn (): string => __('fin-mail::fin-mail.template.language_label', ['locale' => strtoupper($this->activeLocale)]))
-                ->icon('heroicon-o-language')
+                ->icon(Heroicon::OutlinedLanguage)
                 ->button(),
         ];
     }

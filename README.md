@@ -13,7 +13,7 @@ A powerful email template manager and composer for Filament. Build, manage, and 
 - **Theme System** — Create color themes and apply them to templates
 - **Swappable Editor** — Ships with Tiptap support, but swap in TinyMCE or any editor via the `EditorContract`
 - **Categories & Tags** — Organize templates as they grow
-- **Reusable Actions** — `SendEmailTableAction` and `SentEmailsRelationManager` drop into any Filament resource
+- **Reusable Actions** — `SendEmailAction` and `SentEmailsRelationManager` drop into any Filament resource
 - **Preview & Test Send** — Preview templates inline and send test emails from the admin
 - **Admin Settings** — Manage sender defaults, branding, logging, and attachment rules from the UI
 
@@ -88,10 +88,10 @@ Mail::to($customer->email)->send(
 ### Adding "Send Email" to any resource
 
 ```php
-use FinityLabs\FinMail\Actions\SendEmailTableAction;
+use FinityLabs\FinMail\Actions\SendEmailAction;
 
-// In your table actions
-SendEmailTableAction::make()
+// In your table actions, header actions, or anywhere Filament actions are used
+SendEmailAction::make()
     ->template('invoice-sent')
     ->recipient(fn (Invoice $record) => $record->customer->email)
     ->models(fn (Invoice $record) => [

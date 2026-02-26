@@ -7,6 +7,7 @@ namespace FinityLabs\FinMail\Resources\EmailThemeResource;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use FinityLabs\FinMail\Enums\NavigationGroup;
 use FinityLabs\FinMail\Models\EmailTheme;
@@ -22,7 +23,7 @@ class EmailThemeResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = NavigationGroup::Email;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-paint-brush';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPaintBrush;
 
     protected static ?int $navigationSort = 2;
 

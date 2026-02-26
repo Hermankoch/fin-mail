@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace FinityLabs\FinMail\Resources\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -33,7 +35,7 @@ class SentEmailsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sentEmails';
 
-    protected static ?string $icon = 'heroicon-o-envelope';
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedEnvelope;
 
     public static function getTitle($ownerRecord, string $pageClass): string
     {
@@ -79,7 +81,7 @@ class SentEmailsRelationManager extends RelationManager
             ->recordActions([
                 Action::make('view_body')
                     ->label(__('fin-mail::fin-mail.relation.actions.view'))
-                    ->icon('heroicon-o-eye')
+                    ->icon(Heroicon::OutlinedEye)
                     ->modal()
                     ->modalHeading(fn ($record): string => $record->subject)
                     ->modalContent(fn ($record) => view('fin-mail::components.email-preview', [
@@ -91,7 +93,7 @@ class SentEmailsRelationManager extends RelationManager
 
                 Action::make('resend')
                     ->label(__('fin-mail::fin-mail.relation.actions.resend'))
-                    ->icon('heroicon-o-arrow-path')
+                    ->icon(Heroicon::OutlinedArrowPath)
                     ->requiresConfirmation()
                     ->modalDescription(__('fin-mail::fin-mail.relation.actions.resend_confirm'))
                     ->action(function ($record): void {
@@ -151,6 +153,6 @@ class SentEmailsRelationManager extends RelationManager
             ])
             ->emptyStateHeading(__('fin-mail::fin-mail.relation.empty.heading'))
             ->emptyStateDescription(__('fin-mail::fin-mail.relation.empty.description'))
-            ->emptyStateIcon('heroicon-o-envelope');
+            ->emptyStateIcon(Heroicon::OutlinedEnvelope);
     }
 }

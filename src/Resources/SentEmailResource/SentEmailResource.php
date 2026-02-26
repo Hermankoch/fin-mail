@@ -6,6 +6,7 @@ namespace FinityLabs\FinMail\Resources\SentEmailResource;
 
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use FinityLabs\FinMail\Enums\NavigationGroup;
 use FinityLabs\FinMail\Models\SentEmail;
@@ -20,7 +21,7 @@ class SentEmailResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = NavigationGroup::Email;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-inbox-stack';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInboxStack;
 
     protected static ?int $navigationSort = 3;
 

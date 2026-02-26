@@ -9,6 +9,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Actions\EmailSender;
 use FinityLabs\FinMail\Models\EmailTemplate;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
@@ -30,7 +31,7 @@ class ComposeEmail extends Page
 
     protected static ?string $title = null;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-paper-airplane';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPaperAirplane;
 
     /** @var array<string, mixed>|null */
     public ?array $data = [];
@@ -92,7 +93,7 @@ class ComposeEmail extends Page
         return [
             Action::make('back')
                 ->label(__('fin-mail::fin-mail.template.actions.back_to_templates'))
-                ->icon('heroicon-o-arrow-left')
+                ->icon(Heroicon::OutlinedArrowLeft)
                 ->url(static::getResource()::getUrl('index'))
                 ->color('gray'),
         ];
@@ -106,7 +107,7 @@ class ComposeEmail extends Page
         return [
             Action::make('send')
                 ->label(__('fin-mail::fin-mail.compose.actions.send'))
-                ->icon('heroicon-o-paper-airplane')
+                ->icon(Heroicon::OutlinedPaperAirplane)
                 ->action('send')
                 ->color('primary')
                 ->requiresConfirmation()
@@ -115,7 +116,7 @@ class ComposeEmail extends Page
 
             Action::make('preview')
                 ->label(__('fin-mail::fin-mail.compose.actions.preview'))
-                ->icon('heroicon-o-eye')
+                ->icon(Heroicon::OutlinedEye)
                 ->action('preview')
                 ->color('gray'),
         ];

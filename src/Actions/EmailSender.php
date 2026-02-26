@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Shared service that handles the actual email sending logic.
- * Used by SendEmailAction, SendEmailTableAction, and ComposeEmail page.
+ * Used by SendEmailAction and the ComposeEmail page.
  */
 class EmailSender
 {

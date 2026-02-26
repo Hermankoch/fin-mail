@@ -7,6 +7,7 @@ namespace FinityLabs\FinMail\Resources\EmailTemplateResource;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use FinityLabs\FinMail\Enums\NavigationGroup;
 use FinityLabs\FinMail\Models\EmailTemplate;
@@ -22,7 +23,7 @@ class EmailTemplateResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = NavigationGroup::Email;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
     protected static ?int $navigationSort = 1;
 
