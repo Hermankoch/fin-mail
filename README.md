@@ -169,6 +169,21 @@ Other publish tags:
 | `fin-mail-settings-migrations` | Spatie Settings migrations |
 | `fin-mail-views` | Email template views |
 
+## Uninstalling
+
+Run the uninstall command **before** removing the package:
+
+```bash
+php artisan fin-mail:uninstall
+composer remove finity-labs/fin-mail
+```
+
+The uninstall command will:
+- Remove `FinMailPlugin::make()` from your panel provider(s)
+- Optionally drop all FinMail database tables and settings entries
+- Optionally delete published migrations, config, views, and translations
+- Clear settings and application caches
+
 ## Testing
 
 ```bash
