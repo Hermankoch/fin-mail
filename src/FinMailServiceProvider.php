@@ -28,6 +28,7 @@ class FinMailServiceProvider extends PackageServiceProvider
             ])
             ->hasCommands([
                 Commands\InstallCommand::class,
+                Commands\UninstallCommand::class,
                 Commands\CleanupSentEmails::class,
             ]);
 

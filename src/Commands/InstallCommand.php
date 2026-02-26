@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace FinityLabs\FinMail\Commands;
 
 use FinityLabs\FinMail\Commands\Concerns\CanRegisterPlugin;
+use FinityLabs\FinMail\Commands\Concerns\DiscoversPanelProviders;
 use FinityLabs\FinMail\Enums\CleanupFrequency;
 use FinityLabs\FinMail\Settings\LoggingSettings;
 use FinityLabs\FinMail\Settings\MailSettings;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\select;
@@ -17,6 +17,7 @@ use function Laravel\Prompts\select;
 class InstallCommand extends Command
 {
     use CanRegisterPlugin;
+    use DiscoversPanelProviders;
 
     /** @var array<string, array{display: string, flag-icon: string}> */
     private const LOCALE_MAP = [
@@ -234,41 +235,5 @@ class InstallCommand extends Command
         } catch (\Throwable) {
             $this->components->warn('Could not save cleanup settings. Configure them manually in the admin panel.');
         }
-    }
-
-    /**
-     * Scan app/Providers/Filament/ for panel provider files.
-     *
-     * @return array<string, string> Panel ID => file path
-     */
-    protected function discoverPanelProviders(): array
-    {
-        $directory = app_path('Providers/Filament');
-
-        if (! is_dir($directory)) {
-            return [];
-        }
-
-        $providers = [];
-        $files = glob($directory.'/*PanelProvider.php');
-
-        if ($files === false) {
-            return [];
-        }
-
-        foreach ($files as $file) {
-            // AdminPanelProvider.php → admin
-            $filename = basename($file, '.php');
-            $panelId = (string) Str::of($filename)
-                ->before('PanelProvider')
-                ->snake()
-                ->replace('_', '-');
-
-            if ($panelId !== '') {
-                $providers[$panelId] = $file;
-            }
-        }
-
-        return $providers;
     }
 }
