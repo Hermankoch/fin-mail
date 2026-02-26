@@ -55,8 +55,10 @@ class TemplateMail extends Mailable implements ShouldQueue
 
     public function __construct(
         protected readonly string $templateKey,
-        protected readonly ?string $locale = null,
+        ?string $locale = null,
     ) {
+        $this->locale = $locale;
+
         $template = EmailTemplate::findByKey($this->templateKey, $this->locale);
 
         if (! $template) {
@@ -137,15 +139,17 @@ class TemplateMail extends Mailable implements ShouldQueue
 
         $mailSettings = app(GeneralSettings::class);
 
+        $templateFrom = $this->emailTemplate->from;
+
         $from = $this->overrideFrom
-            ?? $this->emailTemplate->from
+            ?? (! empty($templateFrom['address']) ? $templateFrom : null)
             ?? [
                 'address' => $mailSettings->default_from_address,
                 'name' => $mailSettings->default_from_name,
             ];
 
         return new Envelope(
-            from: new Address($from['address'], $from['name'] ?? ''),
+            from: new Address($from['address'] ?? $mailSettings->default_from_address, $from['name'] ?? ''),
             subject: $this->overrideSubject ?? $rendered['subject'],
         );
     }
