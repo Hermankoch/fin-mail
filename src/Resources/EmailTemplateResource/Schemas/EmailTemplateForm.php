@@ -45,6 +45,7 @@ class EmailTemplateForm
 
                             Grid::make(2)->schema([
                                 TextInput::make('key')
+                                    ->label(__('fin-mail::fin-mail.template.fields.key'))
                                     ->required()
                                     ->unique(ignoreRecord: true)
                                     ->helperText(__('fin-mail::fin-mail.template.fields.key_helper'))
@@ -53,6 +54,7 @@ class EmailTemplateForm
                                     ->dehydrated(true),
 
                                 Select::make('category')
+                                    ->label(__('fin-mail::fin-mail.template.fields.category'))
                                     ->options(fn (): array => app(GeneralSettings::class)->getCategoryOptions())
                                     ->default('transactional')
                                     ->native(false)
@@ -73,22 +75,26 @@ class EmailTemplateForm
                                 ->columnSpanFull(),
 
                             TextInput::make('name')
+                                ->label(__('fin-mail::fin-mail.template.fields.name'))
                                 ->required()
                                 ->maxLength(255)
                                 ->columnSpanFull(),
 
                             TextInput::make('subject')
+                                ->label(__('fin-mail::fin-mail.template.fields.subject'))
                                 ->required()
                                 ->maxLength(255)
                                 ->helperText(__('fin-mail::fin-mail.template.fields.subject_helper'))
                                 ->columnSpanFull(),
 
                             TextInput::make('preheader')
+                                ->label(__('fin-mail::fin-mail.template.fields.preheader'))
                                 ->maxLength(255)
                                 ->helperText(__('fin-mail::fin-mail.template.fields.preheader_helper'))
                                 ->columnSpanFull(),
 
                             $editor->make('body')
+                                ->label(__('fin-mail::fin-mail.template.fields.body'))
                                 ->required(),
                         ]),
 
@@ -110,6 +116,7 @@ class EmailTemplateForm
                             ]),
 
                             TagsInput::make('tags')
+                                ->label(__('fin-mail::fin-mail.template.fields.tags'))
                                 ->placeholder(__('fin-mail::fin-mail.template.fields.tags_placeholder')),
 
                             Section::make(__('fin-mail::fin-mail.template.sections.custom_sender'))
@@ -137,12 +144,15 @@ class EmailTemplateForm
                                 ->helperText(__('fin-mail::fin-mail.template.tokens.helper'))
                                 ->schema([
                                     TextInput::make('token')
+                                        ->label(__('fin-mail::fin-mail.template.tokens.token'))
                                         ->placeholder(__('fin-mail::fin-mail.template.tokens.token_placeholder'))
                                         ->required(),
                                     TextInput::make('description')
+                                        ->label(__('fin-mail::fin-mail.template.tokens.description'))
                                         ->placeholder(__('fin-mail::fin-mail.template.tokens.description_placeholder'))
                                         ->required(),
                                     TextInput::make('example')
+                                        ->label(__('fin-mail::fin-mail.template.tokens.example'))
                                         ->placeholder(__('fin-mail::fin-mail.template.tokens.example_placeholder')),
                                 ])
                                 ->columns(3)

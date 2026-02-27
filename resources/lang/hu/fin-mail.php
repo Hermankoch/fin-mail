@@ -60,6 +60,9 @@ return [
         'tokens' => [
             'label' => 'Elérhető tokenek',
             'helper' => 'Dokumentálja a sablonhoz elérhető tokeneket. Ez segíti a szerkesztőket, hogy tudják, milyen változókat használhatnak.',
+            'token' => 'Token',
+            'description' => 'Leírás',
+            'example' => 'Példa',
             'token_placeholder' => 'user.name',
             'description_placeholder' => 'A címzett teljes neve',
             'example_placeholder' => 'Kovács János',
@@ -71,6 +74,7 @@ return [
             'active' => 'Aktív',
             'locked' => 'Zárolt',
             'sent' => 'Elküldve',
+            'updated_at' => 'Frissítve',
         ],
 
         'actions' => [
@@ -130,6 +134,9 @@ return [
             'cc_placeholder' => 'Másolat címek',
             'bcc_placeholder' => 'Titkos másolat címek',
             'locale' => 'Nyelv',
+            'subject' => 'Tárgy',
+            'preheader' => 'Előnézeti szöveg',
+            'body' => 'Tartalom',
             'attach_files' => 'Fájlok csatolása',
             'preheader_helper' => 'Előnézeti szöveg, amely az e-mail kliensekben megnyitás előtt jelenik meg',
             'no_tokens' => 'Nincsenek dokumentált tokenek ehhez a sablonhoz. A {{ user.name }} típusú tokenek az API/kód általi küldéskor kerülnek behelyettesítésre.',
@@ -238,6 +245,7 @@ return [
             'button' => 'Gomb',
             'default' => 'Alapértelmezett',
             'templates' => 'Sablonok',
+            'updated_at' => 'Frissítve',
         ],
 
         'replicate_suffix' => '(Másolat)',
@@ -254,6 +262,8 @@ return [
             'to' => 'Címzett',
             'template' => 'Sablon',
             'template_placeholder' => 'Egyéni',
+            'subject' => 'Tárgy',
+            'status' => 'Állapot',
             'sent_by' => 'Küldte',
             'sent_by_placeholder' => 'Rendszer',
             'related_to' => 'Kapcsolódik',
@@ -294,6 +304,8 @@ return [
         'columns' => [
             'to' => 'Címzett',
             'template' => 'Sablon',
+            'subject' => 'Tárgy',
+            'status' => 'Állapot',
             'sent_by' => 'Küldte',
             'sent_by_placeholder' => 'Rendszer',
             'sent_at' => 'Elküldve',

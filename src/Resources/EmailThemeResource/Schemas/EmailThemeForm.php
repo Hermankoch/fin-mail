@@ -23,6 +23,7 @@ class EmailThemeForm
                 Section::make(__('fin-mail::fin-mail.theme.sections.details'))
                     ->schema([
                         TextInput::make('name')
+                            ->label(__('fin-mail::fin-mail.theme.fields.name'))
                             ->required()
                             ->maxLength(255),
 

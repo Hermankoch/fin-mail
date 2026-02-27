@@ -47,6 +47,7 @@ class SentEmailsRelationManager extends RelationManager
         return $table
             ->columns([
                 TextColumn::make('subject')
+                    ->label(__('fin-mail::fin-mail.relation.columns.subject'))
                     ->searchable()
                     ->limit(50),
 
@@ -61,6 +62,7 @@ class SentEmailsRelationManager extends RelationManager
                     ->placeholder('—'),
 
                 TextColumn::make('status')
+                    ->label(__('fin-mail::fin-mail.relation.columns.status'))
                     ->badge(),
 
                 TextColumn::make('sender.name')

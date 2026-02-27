@@ -27,24 +27,30 @@ class EmailTemplateInfolist
                         ->icon(Heroicon::OutlinedDocumentText)
                         ->schema([
                             TextEntry::make('name')
+                                ->label(__('fin-mail::fin-mail.template.fields.name'))
                                 ->columnSpanFull(),
 
                             TextEntry::make('key')
+                                ->label(__('fin-mail::fin-mail.template.fields.key'))
                                 ->badge()
                                 ->color('gray'),
 
                             TextEntry::make('category')
+                                ->label(__('fin-mail::fin-mail.template.fields.category'))
                                 ->badge()
                                 ->formatStateUsing(fn (string $state): string => app(GeneralSettings::class)->getCategoryOptions()[$state] ?? $state),
 
                             TextEntry::make('subject')
+                                ->label(__('fin-mail::fin-mail.template.fields.subject'))
                                 ->columnSpanFull(),
 
                             TextEntry::make('preheader')
+                                ->label(__('fin-mail::fin-mail.template.fields.preheader'))
                                 ->columnSpanFull()
                                 ->placeholder('-'),
 
                             TextEntry::make('body')
+                                ->label(__('fin-mail::fin-mail.template.fields.body'))
                                 ->html()
                                 ->columnSpanFull(),
                         ])
@@ -70,6 +76,7 @@ class EmailTemplateInfolist
                                 ->falseColor('gray'),
 
                             TextEntry::make('tags')
+                                ->label(__('fin-mail::fin-mail.template.fields.tags'))
                                 ->badge()
                                 ->placeholder('-')
                                 ->columnSpanFull(),
@@ -96,10 +103,13 @@ class EmailTemplateInfolist
                                 ->label('')
                                 ->schema([
                                     TextEntry::make('token')
+                                        ->label(__('fin-mail::fin-mail.template.tokens.token'))
                                         ->badge()
                                         ->color('gray'),
-                                    TextEntry::make('description'),
+                                    TextEntry::make('description')
+                                        ->label(__('fin-mail::fin-mail.template.tokens.description')),
                                     TextEntry::make('example')
+                                        ->label(__('fin-mail::fin-mail.template.tokens.example'))
                                         ->placeholder('-'),
                                 ])
                                 ->columns(3),

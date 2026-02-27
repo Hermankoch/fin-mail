@@ -89,16 +89,19 @@ class ComposeEmailForm
                                     }),
 
                                 TextInput::make('subject')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.subject'))
                                     ->required()
                                     ->maxLength(255)
                                     ->columnSpanFull(),
 
                                 TextInput::make('preheader')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.preheader'))
                                     ->maxLength(255)
                                     ->helperText(__('fin-mail::fin-mail.compose.fields.preheader_helper'))
                                     ->columnSpanFull(),
 
                                 $editor->make('body')
+                                    ->label(__('fin-mail::fin-mail.compose.fields.body'))
                                     ->required(),
                             ]),
                     ]),

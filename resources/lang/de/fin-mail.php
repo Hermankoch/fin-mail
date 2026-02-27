@@ -60,6 +60,9 @@ return [
         'tokens' => [
             'label' => 'Verfügbare Tokens',
             'helper' => 'Dokumentieren Sie die verfügbaren Tokens für diese Vorlage. Dies hilft Redakteuren zu wissen, welche Variablen sie verwenden können.',
+            'token' => 'Token',
+            'description' => 'Beschreibung',
+            'example' => 'Beispiel',
             'token_placeholder' => 'user.name',
             'description_placeholder' => 'Der vollständige Name des Empfängers',
             'example_placeholder' => 'Max Mustermann',
@@ -71,6 +74,7 @@ return [
             'active' => 'Aktiv',
             'locked' => 'Gesperrt',
             'sent' => 'Gesendet',
+            'updated_at' => 'Aktualisiert',
         ],
 
         'actions' => [
@@ -130,6 +134,9 @@ return [
             'cc_placeholder' => 'CC-Adressen',
             'bcc_placeholder' => 'BCC-Adressen',
             'locale' => 'Sprache',
+            'subject' => 'Betreff',
+            'preheader' => 'Vorschautext',
+            'body' => 'Inhalt',
             'attach_files' => 'Dateien anhängen',
             'preheader_helper' => 'Vorschautext, der in E-Mail-Clients vor dem Öffnen angezeigt wird',
             'no_tokens' => 'Keine Tokens für diese Vorlage dokumentiert. Tokens wie {{ user.name }} werden beim Versand über die API/Code ersetzt.',
@@ -238,6 +245,7 @@ return [
             'button' => 'Schaltfläche',
             'default' => 'Standard',
             'templates' => 'Vorlagen',
+            'updated_at' => 'Aktualisiert',
         ],
 
         'replicate_suffix' => '(Kopie)',
@@ -254,6 +262,8 @@ return [
             'to' => 'An',
             'template' => 'Vorlage',
             'template_placeholder' => 'Benutzerdefiniert',
+            'subject' => 'Betreff',
+            'status' => 'Status',
             'sent_by' => 'Gesendet von',
             'sent_by_placeholder' => 'System',
             'related_to' => 'Bezogen auf',
@@ -294,6 +304,8 @@ return [
         'columns' => [
             'to' => 'An',
             'template' => 'Vorlage',
+            'subject' => 'Betreff',
+            'status' => 'Status',
             'sent_by' => 'Gesendet von',
             'sent_by_placeholder' => 'System',
             'sent_at' => 'Gesendet',

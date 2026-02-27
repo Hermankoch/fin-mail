@@ -22,6 +22,7 @@ class EmailThemesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('fin-mail::fin-mail.theme.fields.name'))
                     ->searchable()
                     ->sortable(),
 
@@ -47,6 +48,7 @@ class EmailThemesTable
                     ->sortable(),
 
                 TextColumn::make('updated_at')
+                    ->label(__('fin-mail::fin-mail.theme.columns.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),

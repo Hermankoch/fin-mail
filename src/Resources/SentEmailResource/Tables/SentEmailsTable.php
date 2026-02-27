@@ -25,6 +25,7 @@ class SentEmailsTable
         return $table
             ->columns([
                 TextColumn::make('subject')
+                    ->label(__('fin-mail::fin-mail.sent.columns.subject'))
                     ->searchable()
                     ->sortable()
                     ->limit(50),
@@ -43,6 +44,7 @@ class SentEmailsTable
                     ->placeholder(__('fin-mail::fin-mail.sent.columns.template_placeholder')),
 
                 TextColumn::make('status')
+                    ->label(__('fin-mail::fin-mail.sent.columns.status'))
                     ->badge(),
 
                 TextColumn::make('sender.name')

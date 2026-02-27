@@ -60,6 +60,9 @@ return [
         'tokens' => [
             'label' => 'Available Tokens',
             'helper' => 'Document the tokens available for this template. This helps editors know what variables they can use.',
+            'token' => 'Token',
+            'description' => 'Description',
+            'example' => 'Example',
             'token_placeholder' => 'user.name',
             'description_placeholder' => 'The full name of the recipient',
             'example_placeholder' => 'John Doe',
@@ -71,6 +74,7 @@ return [
             'active' => 'Active',
             'locked' => 'Locked',
             'sent' => 'Sent',
+            'updated_at' => 'Updated',
         ],
 
         'actions' => [
@@ -130,6 +134,9 @@ return [
             'cc_placeholder' => 'CC addresses',
             'bcc_placeholder' => 'BCC addresses',
             'locale' => 'Language',
+            'subject' => 'Subject',
+            'preheader' => 'Preheader',
+            'body' => 'Body',
             'attach_files' => 'Attach Files',
             'preheader_helper' => 'Preview text shown in email clients before opening',
             'no_tokens' => 'No tokens documented for this template. Tokens like {{ user.name }} will be replaced when sent via the API/code.',
@@ -238,6 +245,7 @@ return [
             'button' => 'Button',
             'default' => 'Default',
             'templates' => 'Templates',
+            'updated_at' => 'Updated',
         ],
 
         'replicate_suffix' => '(Copy)',
@@ -255,6 +263,8 @@ return [
             'template' => 'Template',
             'template_placeholder' => 'Custom',
             'sent_by' => 'Sent By',
+            'subject' => 'Subject',
+            'status' => 'Status',
             'sent_by_placeholder' => 'System',
             'related_to' => 'Related To',
             'sent_at' => 'Sent',
@@ -294,6 +304,8 @@ return [
         'columns' => [
             'to' => 'To',
             'template' => 'Template',
+            'subject' => 'Subject',
+            'status' => 'Status',
             'sent_by' => 'Sent By',
             'sent_by_placeholder' => 'System',
             'sent_at' => 'Sent',

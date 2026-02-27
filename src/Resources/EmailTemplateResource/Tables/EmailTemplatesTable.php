@@ -33,10 +33,12 @@ class EmailTemplatesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('fin-mail::fin-mail.template.fields.name'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('key')
+                    ->label(__('fin-mail::fin-mail.template.fields.key'))
                     ->badge()
                     ->color('gray')
                     ->searchable(),
@@ -47,10 +49,12 @@ class EmailTemplatesTable
                     ->getStateUsing(fn ($record): array => $record->getTranslatedLocales('name')),
 
                 TextColumn::make('category')
+                    ->label(__('fin-mail::fin-mail.template.fields.category'))
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => app(GeneralSettings::class)->getCategoryOptions()[$state] ?? $state),
 
                 TextColumn::make('subject')
+                    ->label(__('fin-mail::fin-mail.template.fields.subject'))
                     ->limit(40)
                     ->toggleable(),
 
@@ -70,12 +74,14 @@ class EmailTemplatesTable
                     ->sortable(),
 
                 TextColumn::make('updated_at')
+                    ->label(__('fin-mail::fin-mail.template.columns.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),
             ])
             ->filters([
                 SelectFilter::make('category')
+                    ->label(__('fin-mail::fin-mail.template.fields.category'))
                     ->options(fn (): array => app(GeneralSettings::class)->getCategoryOptions()),
 
                 TernaryFilter::make('is_active')

@@ -18,7 +18,8 @@ class EmailThemeInfolist
             ->schema([
                 Section::make(__('fin-mail::fin-mail.theme.sections.details'))
                     ->schema([
-                        TextEntry::make('name'),
+                        TextEntry::make('name')
+                            ->label(__('fin-mail::fin-mail.theme.fields.name')),
 
                         IconEntry::make('is_default')
                             ->label(__('fin-mail::fin-mail.theme.fields.is_default'))
