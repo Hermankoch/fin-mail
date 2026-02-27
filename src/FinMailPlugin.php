@@ -7,17 +7,28 @@ namespace FinityLabs\FinMail;
 use Closure;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Support\Concerns\EvaluatesClosures;
+use FinityLabs\FinMail\Enums\NavigationGroup;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
 use FinityLabs\FinMail\Resources\EmailThemeResource\EmailThemeResource;
 use FinityLabs\FinMail\Resources\SentEmailResource\SentEmailResource;
+use UnitEnum;
 
 class FinMailPlugin implements Plugin
 {
-    protected bool|Closure $navigationEnabled = true;
+    use EvaluatesClosures;
 
     protected bool|Closure $sentEmailsEnabled = true;
 
     protected bool|Closure $themesEnabled = true;
+
+    protected string|UnitEnum|Closure|null $emailTemplateNavigationGroup = NavigationGroup::Email;
+
+    protected string|UnitEnum|Closure|null $emailThemeNavigationGroup = NavigationGroup::Email;
+
+    protected string|UnitEnum|Closure|null $sentEmailNavigationGroup = NavigationGroup::Email;
+
+    protected string|UnitEnum|Closure|null $settingsNavigationGroup = NavigationGroup::Email;
 
     public static function make(): static
     {
@@ -59,13 +70,6 @@ class FinMailPlugin implements Plugin
         //
     }
 
-    public function enableNavigation(bool|Closure $enabled = true): static
-    {
-        $this->navigationEnabled = $enabled;
-
-        return $this;
-    }
-
     public function enableSentEmails(bool|Closure $enabled = true): static
     {
         $this->sentEmailsEnabled = $enabled;
@@ -80,13 +84,61 @@ class FinMailPlugin implements Plugin
         return $this;
     }
 
-    public function isNavigationEnabled(): bool
+    public function navigationGroup(string|UnitEnum|Closure|null $group): static
     {
-        return $this->evaluate($this->navigationEnabled);
+        $this->emailTemplateNavigationGroup = $group;
+        $this->emailThemeNavigationGroup = $group;
+        $this->sentEmailNavigationGroup = $group;
+        $this->settingsNavigationGroup = $group;
+
+        return $this;
     }
 
-    protected function evaluate(bool|Closure $value): bool
+    public function emailTemplateNavigationGroup(string|UnitEnum|Closure|null $group): static
     {
-        return is_callable($value) ? $value() : $value;
+        $this->emailTemplateNavigationGroup = $group;
+
+        return $this;
+    }
+
+    public function emailThemeNavigationGroup(string|UnitEnum|Closure|null $group): static
+    {
+        $this->emailThemeNavigationGroup = $group;
+
+        return $this;
+    }
+
+    public function sentEmailNavigationGroup(string|UnitEnum|Closure|null $group): static
+    {
+        $this->sentEmailNavigationGroup = $group;
+
+        return $this;
+    }
+
+    public function settingsNavigationGroup(string|UnitEnum|Closure|null $group): static
+    {
+        $this->settingsNavigationGroup = $group;
+
+        return $this;
+    }
+
+    public function getEmailTemplateNavigationGroup(): string|UnitEnum|null
+    {
+        return $this->evaluate($this->emailTemplateNavigationGroup);
+    }
+
+    public function getEmailThemeNavigationGroup(): string|UnitEnum|null
+    {
+        return $this->evaluate($this->emailThemeNavigationGroup);
+    }
+
+    public function getSentEmailNavigationGroup(): string|UnitEnum|null
+    {
+        return $this->evaluate($this->sentEmailNavigationGroup);
+    }
+
+    public function getSettingsNavigationGroup(): string|UnitEnum|null
+    {
+        return $this->evaluate($this->settingsNavigationGroup);
     }
 }

@@ -9,12 +9,10 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use FinityLabs\FinMail\Enums\NavigationGroup;
 use FinityLabs\FinMail\Models\EmailTheme;
 use FinityLabs\FinMail\Resources\EmailThemeResource\Schemas\EmailThemeForm;
 use FinityLabs\FinMail\Resources\EmailThemeResource\Schemas\EmailThemeInfolist;
 use FinityLabs\FinMail\Resources\EmailThemeResource\Tables\EmailThemesTable;
-use UnitEnum;
 
 class EmailThemeResource extends Resource
 {
@@ -22,11 +20,17 @@ class EmailThemeResource extends Resource
 
     protected static ?string $slug = 'email-themes';
 
-    protected static string|UnitEnum|null $navigationGroup = NavigationGroup::Email;
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPaintBrush;
 
     protected static ?int $navigationSort = 2;
+
+    public static function getNavigationGroup(): string|\UnitEnum|null
+    {
+        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        $plugin = filament('fin-mail');
+
+        return $plugin->getEmailThemeNavigationGroup();
+    }
 
     public static function getNavigationLabel(): string
     {

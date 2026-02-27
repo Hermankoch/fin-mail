@@ -8,13 +8,10 @@ use BackedEnum;
 use Filament\Clusters\Cluster;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Support\Icons\Heroicon;
-use FinityLabs\FinMail\Enums\NavigationGroup;
 use UnitEnum;
 
 class FinMailSettings extends Cluster
 {
-    protected static string|UnitEnum|null $navigationGroup = NavigationGroup::Email;
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
     protected static ?int $navigationSort = 10;
@@ -22,6 +19,14 @@ class FinMailSettings extends Cluster
     protected static ?string $slug = 'mail-settings';
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
+
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        $plugin = filament('fin-mail');
+
+        return $plugin->getSettingsNavigationGroup();
+    }
 
     public static function getNavigationLabel(): string
     {
