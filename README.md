@@ -1,3 +1,11 @@
+[![FILAMENT 4.x](https://img.shields.io/badge/FILAMENT-4.x-EBB304?style=flat-square)](https://filamentphp.com/docs/4.x/panels/installation)
+[![FILAMENT 5.x](https://img.shields.io/badge/FILAMENT-5.x-EBB304?style=flat-square)](https://filamentphp.com/docs/5.x/panels/installation)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/finity-labs/fin-mail.svg?style=flat-square)](https://packagist.org/packages/finity-labs/fin-mail)
+[![Tests](https://github.com/finity-labs/fin-mail/actions/workflows/tests.yml/badge.svg)](https://github.com/finity-labs/fin-mail/actions/workflows/tests.yml)
+[![Code Style](https://github.com/finity-labs/fin-mail/actions/workflows/style.yml/badge.svg)](https://github.com/finity-labs/fin-mail/actions/workflows/style.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/finity-labs/fin-mail.svg?style=flat-square)](https://packagist.org/packages/finity-labs/fin-mail)
+[![License](https://img.shields.io/packagist/l/finity-labs/fin-mail.svg?style=flat-square)](https://packagist.org/packages/finity-labs/fin-mail)
+
 # FinMail
 
 A powerful email template manager and composer for Filament. Build, manage, and send emails directly from your admin panel.
@@ -16,6 +24,7 @@ A powerful email template manager and composer for Filament. Build, manage, and 
 - **Reusable Actions** — `SendEmailAction` and `SentEmailsRelationManager` drop into any Filament resource
 - **Preview & Test Send** — Preview templates inline and send test emails from the admin
 - **Admin Settings** — Manage sender defaults, branding, logging, and attachment rules from the UI
+- **Full Navigation Control** — Configure navigation groups, sort order, and visibility per resource from the plugin
 
 ## Requirements
 
@@ -53,13 +62,38 @@ public function panel(Panel $panel): Panel
 }
 ```
 
-#### Plugin options
+### Plugin options
 
 ```php
 FinMailPlugin::make()
-    ->enableNavigation(fn () => auth()->user()?->isAdmin())
     ->enableSentEmails()    // Show the Sent Emails resource (default: true)
     ->enableThemes()        // Show the Themes resource (default: true)
+    ->deleteActionOnEditPage() // Show delete button on edit pages (default: false)
+```
+
+### Navigation customization
+
+All navigation group settings accept strings, enums, closures, or `null`:
+
+```php
+FinMailPlugin::make()
+    // Set a shared navigation group for all resources and settings
+    ->navigationGroup('Communications')
+
+    // Or configure each resource independently
+    ->emailTemplateNavigationGroup('Email')
+    ->emailThemeNavigationGroup('Email')
+    ->sentEmailNavigationGroup('Logs')
+    ->settingsNavigationGroup('Administration')
+
+    // Set sort order for all resources at once (auto-increments: base, +1, +2, +3)
+    ->navigationSort(10)
+
+    // Or configure each resource independently
+    ->emailTemplateNavigationSort(10)
+    ->emailThemeNavigationSort(20)
+    ->sentEmailNavigationSort(30)
+    ->settingsNavigationSort(40)
 ```
 
 ## Usage
@@ -154,7 +188,7 @@ $invoice->sentEmailsCount();                  // Count
 
 ## Auth Email Overrides
 
-FinMail can replace Laravel's default authentication emails (verification, password reset) with your custom templates, and optionally send a welcome email on registration.
+FinMail can replace the application's default authentication emails (verification, password reset) with your custom templates, and optionally send a welcome email on registration.
 
 ### Enable overrides
 
