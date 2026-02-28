@@ -65,7 +65,7 @@ class EmailTemplatesTable
 
                 IconColumn::make('is_locked')
                     ->label(__('fin-mail::fin-mail.template.columns.locked'))
-                    ->icon(fn (bool $state): ?BackedEnum => $state ? Heroicon::LockClosed : null)
+                    ->icon(fn (bool $state): ?BackedEnum => $state ? Heroicon::OutlinedLockClosed : null)
                     ->color(fn (bool $state): ?string => $state ? 'warning' : null)
                     ->tooltip(fn (bool $state): ?string => $state ? __('fin-mail::fin-mail.template.tooltips.locked') : null),
 
@@ -94,10 +94,12 @@ class EmailTemplatesTable
             ->deferFilters()
             ->recordAction(null)
             ->recordActions([
-                ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make()
+                    ->visible(fn ($record): bool => $record->isDeletable()),
 
+                ActionGroup::make([
                     Action::make('preview')
                         ->label(__('fin-mail::fin-mail.template.actions.preview'))
                         ->icon(Heroicon::OutlinedEye)
@@ -154,9 +156,6 @@ class EmailTemplatesTable
                         ->label(__('fin-mail::fin-mail.template.actions.compose'))
                         ->icon(Heroicon::OutlinedPencilSquare)
                         ->url(fn ($record): string => EmailTemplateResource::getUrl('compose', ['record' => $record])),
-
-                    DeleteAction::make()
-                        ->visible(fn ($record): bool => $record->isDeletable()),
                 ]),
             ])
             ->toolbarActions([

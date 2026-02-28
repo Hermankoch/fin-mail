@@ -70,7 +70,7 @@ class EmailTemplateInfolist
                             IconEntry::make('is_locked')
                                 ->label(__('fin-mail::fin-mail.template.columns.locked'))
                                 ->boolean()
-                                ->trueIcon(Heroicon::LockClosed)
+                                ->trueIcon(Heroicon::OutlinedLockClosed)
                                 ->falseIcon(Heroicon::OutlinedLockOpen)
                                 ->trueColor('warning')
                                 ->falseColor('gray'),

@@ -22,13 +22,13 @@ class FinMailPlugin implements Plugin
 
     protected bool|Closure $themesEnabled = true;
 
-    protected int|null $emailTemplateNavigationSort = 10;
+    protected ?int $emailTemplateNavigationSort = 10;
 
-    protected int|null $emailThemeNavigationSort = 20;
+    protected ?int $emailThemeNavigationSort = 20;
 
-    protected int|null $sentEmailNavigationSort = 30;
+    protected ?int $sentEmailNavigationSort = 30;
 
-    protected int|null $settingsNavigationSort = 40;
+    protected ?int $settingsNavigationSort = 40;
 
     protected string|UnitEnum|Closure|null $emailTemplateNavigationGroup = NavigationGroup::Email;
 
@@ -130,7 +130,7 @@ class FinMailPlugin implements Plugin
         return $this;
     }
 
-    public function navigationSort(int|null $sort): static
+    public function navigationSort(?int $sort): static
     {
         if ($sort === null) {
             $this->emailTemplateNavigationSort = null;
