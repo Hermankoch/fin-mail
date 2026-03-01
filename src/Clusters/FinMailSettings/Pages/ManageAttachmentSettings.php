@@ -14,9 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Clusters\FinMailSettings\FinMailSettings;
 use FinityLabs\FinMail\Settings\AttachmentSettings;
+use FinityLabs\FinMail\Traits\HasPageShieldSupport;
 
 class ManageAttachmentSettings extends SettingsPage
 {
+    use HasPageShieldSupport;
+
     protected static ?string $cluster = FinMailSettings::class;
 
     protected static string $settings = AttachmentSettings::class;
@@ -32,7 +35,7 @@ class ManageAttachmentSettings extends SettingsPage
 
     public function getTitle(): string
     {
-        return __('fin-mail::fin-mail.settings.tabs.attachments');
+        return __('fin-mail::fin-mail.settings.titles.attachments');
     }
 
     public function form(Schema $schema): Schema

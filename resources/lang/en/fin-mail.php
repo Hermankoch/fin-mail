@@ -359,6 +359,14 @@ return [
             'auth_emails' => 'Auth Emails',
         ],
 
+        'titles' => [
+            'general' => 'Email Template Settings - General',
+            'branding' => 'Email Template Settings - Branding',
+            'logging' => 'Email Template Settings - Logging',
+            'attachments' => 'Email Template Settings - Attachments',
+            'auth_emails' => 'Email Template Settings - Auth Emails',
+        ],
+
         'sections' => [
             'default_sender' => 'Default Sender',
             'default_sender_description' => 'The default "From" address for all emails sent by the plugin.',

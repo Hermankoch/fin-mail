@@ -14,10 +14,16 @@ use Illuminate\Console\Command;
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\select;
 
+use Symfony\Component\Process\Process;
+
 class InstallCommand extends Command
 {
     use CanRegisterPlugin;
     use DiscoversPanelProviders;
+
+    protected ?string $panelId = null;
+
+    protected bool $shieldConfigured = false;
 
     /** @var array<string, array{display: string, flag-icon: string}> */
     private const LOCALE_MAP = [
@@ -93,16 +99,23 @@ class InstallCommand extends Command
         }
 
         $this->registerInPanel();
+        $this->configureShield();
         $this->configureSchedule();
 
         $this->newLine();
         $this->info('FinMail plugin installed successfully!');
         $this->newLine();
 
-        $this->table(['Next Steps', 'Details'], [
+        $nextSteps = [
             ['Configure settings', 'Visit the FinMail settings page in Filament admin'],
             ['Auth overrides', 'Enable auth email overrides in Settings → Auth Emails'],
-        ]);
+        ];
+
+        if ($this->shieldConfigured) {
+            $nextSteps[] = ['Assign permissions', 'Assign FinMail Shield permissions to roles'];
+        }
+
+        $this->table(['Next Steps', 'Details'], $nextSteps);
 
         return self::SUCCESS;
     }
@@ -186,24 +199,153 @@ class InstallCommand extends Command
             return;
         }
 
-        $panelId = $this->option('panel');
+        $this->panelId = $this->option('panel');
 
-        if ($panelId === null) {
-            $panelId = select(
+        if ($this->panelId === null) {
+            $this->panelId = select(
                 label: 'Which panel should FinMail be registered in?',
                 options: array_keys($panelProviders),
                 required: true,
             );
         }
 
-        if (! isset($panelProviders[$panelId])) {
-            $this->components->error("Panel provider not found for: {$panelId}");
+        if (! isset($panelProviders[$this->panelId])) {
+            $this->components->error("Panel provider not found for: {$this->panelId}");
 
             return;
         }
 
-        $this->comment("Registering FinMailPlugin in {$panelId} panel...");
-        $this->registerPlugin($panelProviders[$panelId]);
+        $this->comment("Registering FinMailPlugin in {$this->panelId} panel...");
+        $this->registerPlugin($panelProviders[$this->panelId]);
+    }
+
+    protected function configureShield(): void
+    {
+        $configPath = config_path('filament-shield.php');
+
+        if (! file_exists($configPath)) {
+            return;
+        }
+
+        if (! $this->confirm('Register FinMail resources in Filament Shield config?', true)) {
+            return;
+        }
+
+        $content = file_get_contents($configPath);
+
+        if ($content === false) {
+            $this->components->warn('Could not read Shield config file.');
+
+            return;
+        }
+
+        if (str_contains($content, 'FinityLabs\\FinMail')) {
+            $this->components->warn('FinMail resources are already registered in Shield config.');
+
+            return;
+        }
+
+        $entries = ''
+            ."            \\FinityLabs\\FinMail\\Resources\\EmailTemplateResource\\EmailTemplateResource::class => [\n"
+            ."                'viewAny',\n"
+            ."                'view',\n"
+            ."                'create',\n"
+            ."                'update',\n"
+            ."                'delete',\n"
+            ."            ],\n"
+            ."            \\FinityLabs\\FinMail\\Resources\\EmailThemeResource\\EmailThemeResource::class => [\n"
+            ."                'viewAny',\n"
+            ."                'view',\n"
+            ."                'create',\n"
+            ."                'update',\n"
+            ."                'delete',\n"
+            ."            ],\n"
+            ."            \\FinityLabs\\FinMail\\Resources\\SentEmailResource\\SentEmailResource::class => [\n"
+            ."                'viewAny',\n"
+            ."                'view',\n"
+            ."            ],\n";
+
+        $managePos = strpos($content, "'manage' => [");
+
+        if ($managePos === false) {
+            $this->components->warn('Could not find the manage array in Shield config. Add FinMail resources manually.');
+
+            return;
+        }
+
+        $openBracket = strpos($content, '[', $managePos + strlen("'manage' => "));
+
+        if ($openBracket === false) {
+            $this->components->warn('Could not parse Shield config. Add FinMail resources manually.');
+
+            return;
+        }
+
+        // Count brackets to find the matching ]
+        $depth = 1;
+        $pos = $openBracket + 1;
+        $len = strlen($content);
+
+        while ($pos < $len && $depth > 0) {
+            if ($content[$pos] === '[') {
+                $depth++;
+            } elseif ($content[$pos] === ']') {
+                $depth--;
+            }
+
+            if ($depth > 0) {
+                $pos++;
+            }
+        }
+
+        // Insert entries before the closing ] of the manage array
+        $insertPos = strrpos(substr($content, 0, $pos), "\n");
+
+        if ($insertPos === false) {
+            $this->components->warn('Could not parse Shield config. Add FinMail resources manually.');
+
+            return;
+        }
+
+        $insertPos++;
+
+        $content = substr($content, 0, $insertPos).$entries.substr($content, $insertPos);
+
+        file_put_contents($configPath, $content);
+        $this->info('  FinMail resources registered in Shield config');
+
+        $this->generateShieldPermissions();
+    }
+
+    protected function generateShieldPermissions(): void
+    {
+        $this->comment('Generating Shield permissions and policies for FinMail resources...');
+
+        $args = [
+            PHP_BINARY, 'artisan', 'shield:generate',
+            '--resource=EmailTemplateResource,EmailThemeResource,SentEmailResource',
+            '--page=ManageAttachmentSettings,ManageAuthEmailSettings,ManageBrandingSettings,ManageGeneralSettings,ManageLoggingSettings',
+            '--option=permissions',
+            '--ignore-existing-policies',
+            '--no-interaction',
+        ];
+
+        if ($this->panelId !== null) {
+            $args[] = "--panel={$this->panelId}";
+        }
+
+        $process = new Process($args, base_path());
+        $process->setTimeout(60);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $this->shieldConfigured = true;
+            $this->info('  Shield permissions and policies generated');
+        } else {
+            $this->components->warn('Could not generate Shield permissions automatically. Run manually:');
+            $panelFlag = $this->panelId !== null ? " --panel={$this->panelId}" : '';
+            $this->line("  php artisan shield:generate{$panelFlag} --option=policies_and_permissions");
+        }
     }
 
     protected function configureSchedule(): void

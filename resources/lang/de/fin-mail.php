@@ -359,6 +359,14 @@ return [
             'auth_emails' => 'Auth-E-Mails',
         ],
 
+        'titles' => [
+            'general' => 'E-Mail-Vorlageneinstellungen - Allgemein',
+            'branding' => 'E-Mail-Vorlageneinstellungen - Branding',
+            'logging' => 'E-Mail-Vorlageneinstellungen - Protokollierung',
+            'attachments' => 'E-Mail-Vorlageneinstellungen - Anhänge',
+            'auth_emails' => 'E-Mail-Vorlageneinstellungen - Auth-E-Mails',
+        ],
+
         'sections' => [
             'default_sender' => 'Standardabsender',
             'default_sender_description' => 'Die Standard-Absenderadresse für alle vom Plugin gesendeten E-Mails.',

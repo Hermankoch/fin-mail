@@ -359,6 +359,14 @@ return [
             'auth_emails' => 'Auth e-mailek',
         ],
 
+        'titles' => [
+            'general' => 'E-mail sablon beállítások - Általános',
+            'branding' => 'E-mail sablon beállítások - Márkajelzés',
+            'logging' => 'E-mail sablon beállítások - Naplózás',
+            'attachments' => 'E-mail sablon beállítások - Mellékletek',
+            'auth_emails' => 'E-mail sablon beállítások - Auth e-mailek',
+        ],
+
         'sections' => [
             'default_sender' => 'Alapértelmezett feladó',
             'default_sender_description' => 'Az alapértelmezett feladó cím a bővítmény által küldött összes e-mailhez.',

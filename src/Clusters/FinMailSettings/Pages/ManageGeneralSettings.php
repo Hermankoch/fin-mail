@@ -14,9 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Clusters\FinMailSettings\FinMailSettings;
 use FinityLabs\FinMail\Settings\GeneralSettings;
+use FinityLabs\FinMail\Traits\HasPageShieldSupport;
 
 class ManageGeneralSettings extends SettingsPage
 {
+    use HasPageShieldSupport;
+
     protected static ?string $cluster = FinMailSettings::class;
 
     protected static string $settings = GeneralSettings::class;
@@ -32,7 +35,7 @@ class ManageGeneralSettings extends SettingsPage
 
     public function getTitle(): string
     {
-        return __('fin-mail::fin-mail.settings.tabs.general');
+        return __('fin-mail::fin-mail.settings.titles.general');
     }
 
     public function form(Schema $schema): Schema

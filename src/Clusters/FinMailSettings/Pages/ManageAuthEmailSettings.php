@@ -12,9 +12,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Clusters\FinMailSettings\FinMailSettings;
 use FinityLabs\FinMail\Settings\AuthEmailSettings;
+use FinityLabs\FinMail\Traits\HasPageShieldSupport;
 
 class ManageAuthEmailSettings extends SettingsPage
 {
+    use HasPageShieldSupport;
+
     protected static ?string $cluster = FinMailSettings::class;
 
     protected static string $settings = AuthEmailSettings::class;
@@ -30,7 +33,7 @@ class ManageAuthEmailSettings extends SettingsPage
 
     public function getTitle(): string
     {
-        return __('fin-mail::fin-mail.settings.tabs.auth_emails');
+        return __('fin-mail::fin-mail.settings.titles.auth_emails');
     }
 
     public function form(Schema $schema): Schema

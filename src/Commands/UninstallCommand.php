@@ -46,6 +46,7 @@ class UninstallCommand extends Command
         $this->newLine();
 
         $this->deregisterFromPanels();
+        $this->removeShieldConfig();
         $this->cleanupDatabaseTables();
         $this->cleanupPublishedMigrations();
         $this->cleanupPublishedConfig();
@@ -77,6 +78,121 @@ class UninstallCommand extends Command
                 $this->deregisterPlugin($path);
             }
         }
+    }
+
+    protected function removeShieldConfig(): void
+    {
+        $configPath = config_path('filament-shield.php');
+
+        if (! file_exists($configPath)) {
+            return;
+        }
+
+        $content = file_get_contents($configPath);
+
+        if ($content === false || ! str_contains($content, 'FinityLabs\\FinMail')) {
+            return;
+        }
+
+        $this->comment('Removing FinMail resources from Shield config...');
+
+        $content = preg_replace(
+            '#[ \t]*\\\\FinityLabs\\\\FinMail\\\\[^\n]+::class\s*=>\s*\[\n(?:[ \t]+\'[^\']+\',?\n)*[ \t]*\],?\n#',
+            '',
+            $content,
+        );
+
+        if ($content !== null) {
+            file_put_contents($configPath, $content);
+            $this->info('  FinMail resources removed from Shield config');
+        }
+
+        $this->removeShieldPolicies();
+    }
+
+    protected function removeShieldPolicies(): void
+    {
+        $policiesPath = app_path('Policies');
+        $permissionNames = [];
+
+        $policyFiles = [
+            'EmailTemplatePolicy.php',
+            'EmailThemePolicy.php',
+            'SentEmailPolicy.php',
+        ];
+
+        foreach ($policyFiles as $file) {
+            $filePath = $policiesPath.'/'.$file;
+
+            if (! file_exists($filePath)) {
+                continue;
+            }
+
+            $content = file_get_contents($filePath);
+
+            if ($content === false || ! str_contains($content, 'FinityLabs\\FinMail')) {
+                continue;
+            }
+
+            // Extract permission names from ->can('...') calls
+            if (preg_match_all("/->can\('([^']+)'\)/", $content, $matches)) {
+                $permissionNames = [...$permissionNames, ...$matches[1]];
+            }
+
+            unlink($filePath);
+            $this->info('  Deleted: app/Policies/'.$file);
+        }
+
+        // Collect page permission names from Shield
+        if (class_exists(\BezhanSalleh\FilamentShield\Facades\FilamentShield::class)) {
+            $shieldPages = \BezhanSalleh\FilamentShield\Facades\FilamentShield::getPages();
+
+            $pageClasses = [
+                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageGeneralSettings::class,
+                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageBrandingSettings::class,
+                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageLoggingSettings::class,
+                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageAttachmentSettings::class,
+                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageAuthEmailSettings::class,
+            ];
+
+            foreach ($pageClasses as $pageClass) {
+                $page = $shieldPages[$pageClass] ?? null;
+
+                if ($page) {
+                    $permissionKey = array_key_first($page['permissions']);
+
+                    if ($permissionKey !== null) {
+                        $permissionNames[] = $permissionKey;
+                    }
+                }
+            }
+        }
+
+        if (empty($permissionNames) || ! Schema::hasTable('permissions')) {
+            return;
+        }
+
+        $permissionIds = \Illuminate\Support\Facades\DB::table('permissions')
+            ->whereIn('name', $permissionNames)
+            ->pluck('id');
+
+        if ($permissionIds->isEmpty()) {
+            return;
+        }
+
+        \Illuminate\Support\Facades\DB::table('role_has_permissions')
+            ->whereIn('permission_id', $permissionIds)
+            ->delete();
+
+        \Illuminate\Support\Facades\DB::table('model_has_permissions')
+            ->whereIn('permission_id', $permissionIds)
+            ->delete();
+
+        $deleted = \Illuminate\Support\Facades\DB::table('permissions')
+            ->whereIn('name', $permissionNames)
+            ->delete();
+
+        $this->info("  Removed {$deleted} Shield permissions from database");
     }
 
     protected function cleanupDatabaseTables(): void

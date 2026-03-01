@@ -25,6 +25,7 @@ A powerful email template manager and composer for Filament. Build, manage, and 
 - **Preview & Test Send** — Preview templates inline and send test emails from the admin
 - **Admin Settings** — Manage sender defaults, branding, logging, and attachment rules from the UI
 - **Full Navigation Control** — Configure navigation groups, sort order, and visibility per resource from the plugin
+- **Shield Support** — Built-in policies and permission setup for Filament Shield
 
 ## Requirements
 
@@ -46,6 +47,7 @@ The install command will:
 - Publish config and migrations
 - Optionally run migrations and seed default templates
 - Optionally register the plugin in your Filament panel
+- Optionally configure [Filament Shield](#filament-shield-integration) permissions
 - Optionally configure scheduled cleanup of old sent emails
 
 ### Register the plugin
@@ -186,6 +188,42 @@ $invoice->sentEmailsCount();                  // Count
 | `{% if token %}...{% endif %}` | `{% if user.is_premium %}...{% endif %}` | Conditional |
 | `{% if token %}...{% else %}...{% endif %}` | | If/else |
 
+## Filament Shield Integration
+
+FinMail ships with built-in support for [Filament Shield](https://github.com/bezhanSalleh/filament-shield). Policy files are bundled with the plugin — no generation needed.
+
+### Automatic setup
+
+If Shield is installed, the `fin-mail:install` command will:
+1. Register FinMail resources in your `filament-shield.php` config
+2. Generate the permission entries in the database via `shield:generate`
+
+### Manual setup
+
+If you prefer to set up Shield manually, or if the automatic setup didn't complete:
+
+```bash
+php artisan shield:generate --panel=admin --option=permissions
+```
+
+### Supported permissions
+
+**Resources:**
+
+| Resource | Permissions |
+|----------|------------|
+| Email Templates | `ViewAny`, `View`, `Create`, `Update`, `Delete` |
+| Email Themes | `ViewAny`, `View`, `Create`, `Update`, `Delete` |
+| Sent Emails | `ViewAny`, `View` |
+
+**Settings pages:**
+
+Each settings page (General, Branding, Logging, Attachments, Auth Emails) has its own page-level permission managed by Shield.
+
+### Cleanup on uninstall
+
+The `fin-mail:uninstall` command automatically removes Shield config entries and permission records from the database.
+
 ## Auth Email Overrides
 
 FinMail can replace the application's default authentication emails (verification, password reset) with your custom templates, and optionally send a welcome email on registration.
@@ -236,6 +274,7 @@ composer remove finity-labs/fin-mail
 
 The uninstall command will:
 - Remove `FinMailPlugin::make()` from your panel provider(s)
+- Remove FinMail entries from Shield config and clean up permissions from the database
 - Optionally drop all FinMail database tables and settings entries
 - Optionally delete published migrations, config, views, and translations
 - Clear settings and application caches

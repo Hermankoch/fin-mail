@@ -17,9 +17,12 @@ use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Clusters\FinMailSettings\FinMailSettings;
 use FinityLabs\FinMail\Enums\CleanupFrequency;
 use FinityLabs\FinMail\Settings\LoggingSettings;
+use FinityLabs\FinMail\Traits\HasPageShieldSupport;
 
 class ManageLoggingSettings extends SettingsPage
 {
+    use HasPageShieldSupport;
+
     protected static ?string $cluster = FinMailSettings::class;
 
     protected static string $settings = LoggingSettings::class;
@@ -35,7 +38,7 @@ class ManageLoggingSettings extends SettingsPage
 
     public function getTitle(): string
     {
-        return __('fin-mail::fin-mail.settings.tabs.logging');
+        return __('fin-mail::fin-mail.settings.titles.logging');
     }
 
     /**
