@@ -8,7 +8,7 @@
 
 # FinMail
 
-A powerful email template manager and composer for Filament. Build, manage, and send emails directly from your admin panel.
+A powerful email template manager and composer for Filament. Build, manage, and send emails directly from your admin panel — with dynamic token replacement, multilingual templates, customizable themes, template versioning, email logging with status tracking, auth email overrides, and a reusable Send Email action that drops into any resource.
 
 ## Features
 
