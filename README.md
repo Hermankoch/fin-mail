@@ -188,6 +188,38 @@ $invoice->sentEmailsCount();                  // Count
 | `{% if token %}...{% endif %}` | `{% if user.is_premium %}...{% endif %}` | Conditional |
 | `{% if token %}...{% else %}...{% endif %}` | | If/else |
 
+## Events
+
+FinMail dispatches events at key points in the email lifecycle so your application can react — e.g., log analytics, trigger webhooks, or update related models.
+
+| Event | When | Payload |
+|-------|------|---------|
+| `EmailSending` | Before the email is sent | `SentEmail $sentEmail`, `?EmailTemplate $template` |
+| `EmailSent` | After the email was sent successfully | `SentEmail $sentEmail`, `?EmailTemplate $template` |
+| `EmailFailed` | When sending fails | `SentEmail $sentEmail`, `string $error`, `?EmailTemplate $template` |
+| `TemplateUpdated` | When a template is saved (new version) | `EmailTemplate $template`, `int $newVersion` |
+
+### Listening to events
+
+```php
+use FinityLabs\FinMail\Events\EmailSent;
+use FinityLabs\FinMail\Events\EmailFailed;
+
+// In a service provider or listener
+Event::listen(EmailSent::class, function (EmailSent $event) {
+    // $event->sentEmail — the SentEmail model
+    // $event->template — the EmailTemplate used (nullable)
+    logger()->info("Email sent to {$event->sentEmail->recipients_display}");
+});
+
+Event::listen(EmailFailed::class, function (EmailFailed $event) {
+    // $event->error — the error message
+    logger()->error("Email failed: {$event->error}");
+});
+```
+
+All event properties are `readonly`. Events use `SerializesModels` so they are safe to dispatch from queued jobs.
+
 ## Filament Shield Integration
 
 FinMail ships with built-in support for [Filament Shield](https://github.com/bezhanSalleh/filament-shield). Policy files are bundled with the plugin — no generation needed.
