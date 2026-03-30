@@ -9,6 +9,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use FinityLabs\FinMail\FinMailPlugin;
 use FinityLabs\FinMail\Models\EmailTemplate;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\Schemas\EmailTemplateForm;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\Schemas\EmailTemplateInfolist;
@@ -24,7 +25,7 @@ class EmailTemplateResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        /** @var FinMailPlugin $plugin */
         $plugin = filament('fin-mail');
 
         return $plugin->getEmailTemplateNavigationSort();
@@ -32,7 +33,7 @@ class EmailTemplateResource extends Resource
 
     public static function getNavigationGroup(): string|\UnitEnum|null
     {
-        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        /** @var FinMailPlugin $plugin */
         $plugin = filament('fin-mail');
 
         return $plugin->getEmailTemplateNavigationGroup();

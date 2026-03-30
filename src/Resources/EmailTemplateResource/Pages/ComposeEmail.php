@@ -23,7 +23,7 @@ use FinityLabs\FinMail\Settings\GeneralSettings;
  *
  * Loaded from: /admin/email-templates/{record}/compose
  *
- * @property \Filament\Schemas\Schema $form
+ * @property Schema $form
  */
 class ComposeEmail extends Page
 {

@@ -8,6 +8,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use FinityLabs\FinMail\FinMailPlugin;
 use FinityLabs\FinMail\Models\SentEmail;
 use FinityLabs\FinMail\Resources\SentEmailResource\Tables\SentEmailsTable;
 use UnitEnum;
@@ -22,7 +23,7 @@ class SentEmailResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        /** @var FinMailPlugin $plugin */
         $plugin = filament('fin-mail');
 
         return $plugin->getSentEmailNavigationSort();
@@ -30,7 +31,7 @@ class SentEmailResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        /** @var FinMailPlugin $plugin */
         $plugin = filament('fin-mail');
 
         return $plugin->getSentEmailNavigationGroup();

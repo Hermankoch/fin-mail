@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FinityLabs\FinMail\Facades;
 
+use FinityLabs\FinMail\FinMailManager;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static string replace(string $content, array $models = [])
  * @method static array templateKeys(?string $locale = null)
  *
- * @see \FinityLabs\FinMail\FinMailManager
+ * @see FinMailManager
  */
 class FinMail extends Facade
 {

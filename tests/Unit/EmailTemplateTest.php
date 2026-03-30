@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use FinityLabs\FinMail\Models\EmailTemplate;
 use FinityLabs\FinMail\Models\EmailTheme;
+use Illuminate\Database\Eloquent\Model;
 
 beforeEach(function () {
     config()->set('fin-mail.tokens.allowed_config_keys', ['app.name']);
@@ -86,7 +87,7 @@ it('renders tokens in subject and body', function () {
         'is_active' => true,
     ]);
 
-    $customer = new class extends \Illuminate\Database\Eloquent\Model
+    $customer = new class extends Model
     {
         protected $attributes = ['name' => 'Acme Corp'];
     };
@@ -107,7 +108,7 @@ it('renders with specific locale', function () {
         'is_active' => true,
     ]);
 
-    $user = new class extends \Illuminate\Database\Eloquent\Model
+    $user = new class extends Model
     {
         protected $attributes = ['name' => 'John'];
     };

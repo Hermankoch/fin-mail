@@ -11,12 +11,15 @@ use FinityLabs\FinMail\Models\SentEmail;
 use FinityLabs\FinMail\Settings\BrandingSettings;
 use FinityLabs\FinMail\Settings\GeneralSettings;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Mail\Factory;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\SentMessage;
 use Illuminate\Queue\SerializesModels;
 
 /**
@@ -204,9 +207,9 @@ class TemplateMail extends Mailable implements ShouldQueue
      * This is called by the queue worker (or sync driver), so it runs
      * after the message has been handed to the mail transport.
      *
-     * @param  \Illuminate\Contracts\Mail\Factory|\Illuminate\Contracts\Mail\Mailer  $mailer
+     * @param  Factory|Mailer  $mailer
      *
-     * @return \Illuminate\Mail\SentMessage|null
+     * @return SentMessage|null
      */
     public function send($mailer)
     {

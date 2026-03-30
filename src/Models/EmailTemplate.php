@@ -7,10 +7,12 @@ namespace FinityLabs\FinMail\Models;
 use FinityLabs\FinMail\Editors\Blocks\ButtonBlock;
 use FinityLabs\FinMail\Helpers\TokenReplacer;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -28,12 +30,12 @@ use Spatie\Translatable\HasTranslations;
  * @property array<string, mixed>|null $token_schema
  * @property bool $is_active
  * @property bool $is_locked
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read EmailTheme|null $theme
- * @property-read \Illuminate\Database\Eloquent\Collection<int, EmailTemplateVersion> $versions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, SentEmail> $sentEmails
+ * @property-read Collection<int, EmailTemplateVersion> $versions
+ * @property-read Collection<int, SentEmail> $sentEmails
  */
 class EmailTemplate extends Model
 {

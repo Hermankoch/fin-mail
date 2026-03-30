@@ -176,7 +176,7 @@ it('handles date casting', function () {
 
     $result = $replacer->replace(
         'Created: {{ order.date }}',
-        ['order' => ['date' => new \DateTime('2026-02-25')]]
+        ['order' => ['date' => new DateTime('2026-02-25')]]
     );
 
     expect($result)->toBe('Created: Feb 25, 2026');

@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace FinityLabs\FinMail\Commands;
 
+use BezhanSalleh\FilamentShield\Facades\FilamentShield;
+use FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageAttachmentSettings;
+use FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageAuthEmailSettings;
+use FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageBrandingSettings;
+use FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageGeneralSettings;
+use FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageLoggingSettings;
 use FinityLabs\FinMail\Commands\Concerns\CanDeregisterPlugin;
 use FinityLabs\FinMail\Commands\Concerns\DiscoversPanelProviders;
 use FinityLabs\FinMail\Commands\Concerns\ManagesThemeStyles;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class UninstallCommand extends Command
@@ -156,15 +163,15 @@ class UninstallCommand extends Command
         }
 
         // Collect page permission names from Shield
-        if (class_exists(\BezhanSalleh\FilamentShield\Facades\FilamentShield::class)) {
-            $shieldPages = \BezhanSalleh\FilamentShield\Facades\FilamentShield::getPages();
+        if (class_exists(FilamentShield::class)) {
+            $shieldPages = FilamentShield::getPages();
 
             $pageClasses = [
-                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageGeneralSettings::class,
-                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageBrandingSettings::class,
-                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageLoggingSettings::class,
-                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageAttachmentSettings::class,
-                \FinityLabs\FinMail\Clusters\FinMailSettings\Pages\ManageAuthEmailSettings::class,
+                ManageGeneralSettings::class,
+                ManageBrandingSettings::class,
+                ManageLoggingSettings::class,
+                ManageAttachmentSettings::class,
+                ManageAuthEmailSettings::class,
             ];
 
             foreach ($pageClasses as $pageClass) {
@@ -184,7 +191,7 @@ class UninstallCommand extends Command
             return;
         }
 
-        $permissionIds = \Illuminate\Support\Facades\DB::table('permissions')
+        $permissionIds = DB::table('permissions')
             ->whereIn('name', $permissionNames)
             ->pluck('id');
 
@@ -192,15 +199,15 @@ class UninstallCommand extends Command
             return;
         }
 
-        \Illuminate\Support\Facades\DB::table('role_has_permissions')
+        DB::table('role_has_permissions')
             ->whereIn('permission_id', $permissionIds)
             ->delete();
 
-        \Illuminate\Support\Facades\DB::table('model_has_permissions')
+        DB::table('model_has_permissions')
             ->whereIn('permission_id', $permissionIds)
             ->delete();
 
-        $deleted = \Illuminate\Support\Facades\DB::table('permissions')
+        $deleted = DB::table('permissions')
             ->whereIn('name', $permissionNames)
             ->delete();
 
@@ -225,7 +232,7 @@ class UninstallCommand extends Command
 
         // Clean up settings entries
         if (Schema::hasTable('settings')) {
-            $deleted = \Illuminate\Support\Facades\DB::table('settings')
+            $deleted = DB::table('settings')
                 ->where('group', 'like', 'fin-mail%')
                 ->delete();
 
@@ -242,7 +249,7 @@ class UninstallCommand extends Command
                 $allMigrations,
             );
 
-            $deleted = \Illuminate\Support\Facades\DB::table('migrations')
+            $deleted = DB::table('migrations')
                 ->where(function ($query) use ($migrationNames): void {
                     foreach ($migrationNames as $name) {
                         $query->orWhere('migration', 'like', "%{$name}");

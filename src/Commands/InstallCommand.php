@@ -7,10 +7,12 @@ namespace FinityLabs\FinMail\Commands;
 use FinityLabs\FinMail\Commands\Concerns\CanRegisterPlugin;
 use FinityLabs\FinMail\Commands\Concerns\DiscoversPanelProviders;
 use FinityLabs\FinMail\Commands\Concerns\ManagesThemeStyles;
+use FinityLabs\FinMail\Database\Seeders\EmailTemplateSeeder;
 use FinityLabs\FinMail\Enums\CleanupFrequency;
 use FinityLabs\FinMail\Settings\GeneralSettings;
 use FinityLabs\FinMail\Settings\LoggingSettings;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schema;
 
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\select;
@@ -133,7 +135,7 @@ class InstallCommand extends Command
         if ($this->option('seed') || $this->confirm('Seed default email templates?', true)) {
             $this->comment('Seeding default templates...');
             $this->call('db:seed', [
-                '--class' => \FinityLabs\FinMail\Database\Seeders\EmailTemplateSeeder::class,
+                '--class' => EmailTemplateSeeder::class,
             ]);
             $this->info('  Default templates seeded (5 templates + 1 theme)');
         }
@@ -177,7 +179,7 @@ class InstallCommand extends Command
 
     protected function ensureSettingsTableExists(): void
     {
-        if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+        if (Schema::hasTable('settings')) {
             return;
         }
 

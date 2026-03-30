@@ -6,6 +6,7 @@ namespace FinityLabs\FinMail\Actions;
 
 use Closure;
 use Filament\Actions\Action;
+use Filament\Schemas\Components\Component;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
@@ -120,7 +121,7 @@ class SendEmailAction extends Action
     */
 
     /**
-     * @return array<int, \Filament\Schemas\Components\Component>
+     * @return array<int, Component>
      */
     protected function getComposeForm(?Model $record): array
     {

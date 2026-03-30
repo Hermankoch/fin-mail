@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use FinityLabs\FinMail\Models\EmailTemplate;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('email_template_versions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\FinityLabs\FinMail\Models\EmailTemplate::class)
+            $table->foreignIdFor(EmailTemplate::class)
                 ->constrained('email_templates')
                 ->cascadeOnDelete();
             $table->unsignedInteger('version');

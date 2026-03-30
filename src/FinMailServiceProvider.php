@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace FinityLabs\FinMail;
 
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Auth\Events\Registered;
+use Filament\Facades\Filament;
 use FinityLabs\FinMail\Contracts\EditorContract;
 use FinityLabs\FinMail\Editors\DefaultEditor;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -63,7 +71,7 @@ class FinMailServiceProvider extends PackageServiceProvider
 
     protected function registerShieldPolicies(): void
     {
-        if (! class_exists(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::class)) {
+        if (! class_exists(FilamentShieldPlugin::class)) {
             return;
         }
 
@@ -79,7 +87,7 @@ class FinMailServiceProvider extends PackageServiceProvider
             Models\SentEmail::class => $namespace.'\\SentEmailPolicy',
         ];
 
-        $gate = \Illuminate\Support\Facades\Gate::getFacadeRoot();
+        $gate = Gate::getFacadeRoot();
 
         foreach ($policyMap as $model => $policy) {
             if (class_exists($policy)) {
@@ -102,8 +110,8 @@ class FinMailServiceProvider extends PackageServiceProvider
             }
 
             if ($authEmails->override_welcome) {
-                \Illuminate\Support\Facades\Event::listen(
-                    \Filament\Auth\Events\Registered::class,
+                Event::listen(
+                    Registered::class,
                     Listeners\SendWelcomeEmail::class,
                 );
             }
@@ -115,8 +123,8 @@ class FinMailServiceProvider extends PackageServiceProvider
     protected function registerScheduledCommands(): void
     {
         $this->app->afterResolving(
-            \Illuminate\Console\Scheduling\Schedule::class,
-            function (\Illuminate\Console\Scheduling\Schedule $schedule): void {
+            Schedule::class,
+            function (Schedule $schedule): void {
                 try {
                     $logging = app(Settings\LoggingSettings::class);
                 } catch (\Throwable) {
@@ -137,7 +145,7 @@ class FinMailServiceProvider extends PackageServiceProvider
 
     protected function registerVerificationOverride(): void
     {
-        \Illuminate\Auth\Notifications\VerifyEmail::toMailUsing(function (mixed $notifiable, string $url): Mail\TemplateMail {
+        VerifyEmail::toMailUsing(function (mixed $notifiable, string $url): Mail\TemplateMail {
             return Mail\TemplateMail::make('user-verify-email', app()->getLocale())
                 ->to($notifiable->getEmailForVerification())
                 ->models([
@@ -149,7 +157,7 @@ class FinMailServiceProvider extends PackageServiceProvider
 
     protected function registerPasswordResetOverride(): void
     {
-        \Illuminate\Auth\Notifications\ResetPassword::toMailUsing(function (mixed $notifiable, string $token): Mail\TemplateMail {
+        ResetPassword::toMailUsing(function (mixed $notifiable, string $token): Mail\TemplateMail {
             $url = $this->buildPasswordResetUrl($notifiable, $token);
 
             return Mail\TemplateMail::make('user-password-reset', app()->getLocale())
@@ -166,9 +174,9 @@ class FinMailServiceProvider extends PackageServiceProvider
         $email = $notifiable->getEmailForPasswordReset();
 
         // Filament panel reset route
-        if (class_exists(\Filament\Facades\Filament::class)) {
+        if (class_exists(Filament::class)) {
             try {
-                return \Filament\Facades\Filament::getResetPasswordUrl($token, $notifiable);
+                return Filament::getResetPasswordUrl($token, $notifiable);
             } catch (\Throwable) {
                 // Panel may not be available in this context.
             }

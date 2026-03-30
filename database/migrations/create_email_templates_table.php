@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use FinityLabs\FinMail\Models\EmailTheme;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,7 +28,7 @@ return new class extends Migration
             $table->json('from')->nullable();
 
             // Theme
-            $table->foreignIdFor(\FinityLabs\FinMail\Models\EmailTheme::class)
+            $table->foreignIdFor(EmailTheme::class)
                 ->nullable()
                 ->constrained('email_themes')
                 ->nullOnDelete();

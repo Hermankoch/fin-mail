@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace FinityLabs\FinMail\Traits;
 
+use BezhanSalleh\FilamentShield\Facades\FilamentShield;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Facades\Filament;
 
 trait HasPageShieldSupport
@@ -31,13 +33,13 @@ trait HasPageShieldSupport
 
     protected static function isShieldAvailable(): bool
     {
-        return class_exists(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::class);
+        return class_exists(FilamentShieldPlugin::class);
     }
 
     protected static function getPagePermission(): ?string
     {
         if (static::$pagePermissionKey === null) {
-            $page = \BezhanSalleh\FilamentShield\Facades\FilamentShield::getPages()[static::class] ?? null;
+            $page = FilamentShield::getPages()[static::class] ?? null;
             static::$pagePermissionKey = $page ? array_key_first($page['permissions']) : null;
         }
 

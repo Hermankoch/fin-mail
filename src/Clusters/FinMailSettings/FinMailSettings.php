@@ -8,6 +8,7 @@ use BackedEnum;
 use Filament\Clusters\Cluster;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Support\Icons\Heroicon;
+use FinityLabs\FinMail\FinMailPlugin;
 use UnitEnum;
 
 class FinMailSettings extends Cluster
@@ -20,7 +21,7 @@ class FinMailSettings extends Cluster
 
     public static function getNavigationSort(): ?int
     {
-        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        /** @var FinMailPlugin $plugin */
         $plugin = filament('fin-mail');
 
         return $plugin->getSettingsNavigationSort();
@@ -28,7 +29,7 @@ class FinMailSettings extends Cluster
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+        /** @var FinMailPlugin $plugin */
         $plugin = filament('fin-mail');
 
         return $plugin->getSettingsNavigationGroup();

@@ -10,12 +10,14 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
+use FinityLabs\FinMail\FinMailPlugin;
+use FinityLabs\FinMail\Models\EmailTemplate;
 use FinityLabs\FinMail\Models\EmailTheme;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
 use FinityLabs\FinMail\Settings\GeneralSettings;
 
 /**
- * @property \FinityLabs\FinMail\Models\EmailTemplate $record
+ * @property EmailTemplate $record
  */
 class EditEmailTemplate extends EditRecord
 {
@@ -113,7 +115,7 @@ class EditEmailTemplate extends EditRecord
 
             DeleteAction::make()
                 ->visible(function (): bool {
-                    /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+                    /** @var FinMailPlugin $plugin */
                     $plugin = filament('fin-mail');
 
                     return $plugin->hasDeleteActionOnEditPage() && $this->record->isDeletable();

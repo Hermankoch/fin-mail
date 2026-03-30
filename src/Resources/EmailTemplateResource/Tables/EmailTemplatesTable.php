@@ -26,6 +26,7 @@ use Filament\Tables\Table;
 use FinityLabs\FinMail\Mail\TemplateMail;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
 use FinityLabs\FinMail\Settings\GeneralSettings;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
 
 class EmailTemplatesTable
@@ -197,7 +198,7 @@ class EmailTemplatesTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
-                        ->before(function (DeleteBulkAction $action, \Illuminate\Database\Eloquent\Collection $records): void {
+                        ->before(function (DeleteBulkAction $action, Collection $records): void {
                             $lockedCount = $records->where('is_locked', true)->count();
                             if ($lockedCount > 0) {
                                 Notification::make()
@@ -208,7 +209,7 @@ class EmailTemplatesTable
                             }
                         })
                         ->using(
-                            fn (\Illuminate\Database\Eloquent\Collection $records) => $records
+                            fn (Collection $records) => $records
                                 ->reject(fn ($record): bool => (bool) $record->getAttribute('is_locked'))
                                 ->each(fn ($record) => $record->delete())
                         ),

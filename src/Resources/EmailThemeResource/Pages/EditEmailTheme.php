@@ -6,10 +6,12 @@ namespace FinityLabs\FinMail\Resources\EmailThemeResource\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use FinityLabs\FinMail\FinMailPlugin;
+use FinityLabs\FinMail\Models\EmailTheme;
 use FinityLabs\FinMail\Resources\EmailThemeResource\EmailThemeResource;
 
 /**
- * @property \FinityLabs\FinMail\Models\EmailTheme $record
+ * @property EmailTheme $record
  */
 class EditEmailTheme extends EditRecord
 {
@@ -20,7 +22,7 @@ class EditEmailTheme extends EditRecord
         return [
             DeleteAction::make()
                 ->visible(function (): bool {
-                    /** @var \FinityLabs\FinMail\FinMailPlugin $plugin */
+                    /** @var FinMailPlugin $plugin */
                     $plugin = filament('fin-mail');
 
                     return $plugin->hasDeleteActionOnEditPage();

@@ -10,11 +10,12 @@ use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
+use FinityLabs\FinMail\Models\EmailTemplate;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
 use FinityLabs\FinMail\Settings\GeneralSettings;
 
 /**
- * @property \FinityLabs\FinMail\Models\EmailTemplate $record
+ * @property EmailTemplate $record
  */
 class ViewEmailTemplate extends ViewRecord
 {
