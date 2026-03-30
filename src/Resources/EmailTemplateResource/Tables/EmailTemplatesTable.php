@@ -98,10 +98,36 @@ class EmailTemplatesTable
                 ViewAction::make(),
                 EditAction::make(),
                 ReplicateAction::make()
-                    ->beforeReplicaSaved(function ($replica): void {
-                        $replica->name = $replica->name.' '.__('fin-mail::fin-mail.template.replicate_suffix');
-                        $replica->key = $replica->key.'-copy-'.time();
+                    ->excludeAttributes(['is_locked', 'sent_emails_count'])
+                    ->mutateRecordDataUsing(function (array $data, $record): array {
+                        $suffix = ' '.__('fin-mail::fin-mail.template.replicate_suffix');
+                        $locale = app()->getLocale();
+
+                        $data['name'] = $record->getTranslation('name', $locale).$suffix;
+                        $data['key'] = $record->key.'-copy-'.time();
+
+                        return $data;
+                    })
+                    ->schema([
+                        TextInput::make('name')
+                            ->label(__('fin-mail::fin-mail.template.fields.name'))
+                            ->required()
+                            ->maxLength(255),
+
+                        TextInput::make('key')
+                            ->label(__('fin-mail::fin-mail.template.fields.key'))
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255),
+                    ])
+                    ->beforeReplicaSaved(function ($replica, array $data): void {
+                        // Set the name only for the current locale, keeping other translations from the original
+                        $replica->setTranslation('name', app()->getLocale(), $data['name']);
+                        $replica->key = $data['key'];
                         $replica->is_locked = false;
+                    })
+                    ->after(function ($replica) {
+                        return redirect(EmailTemplateResource::getUrl('edit', ['record' => $replica]));
                     }),
                 DeleteAction::make()
                     ->visible(fn ($record): bool => $record->isDeletable()),

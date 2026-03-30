@@ -10,10 +10,12 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ReplicateAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use FinityLabs\FinMail\Resources\EmailThemeResource\EmailThemeResource;
 
 class EmailThemesTable
 {
@@ -59,9 +61,24 @@ class EmailThemesTable
                 ViewAction::make(),
                 EditAction::make(),
                 ReplicateAction::make()
-                    ->beforeReplicaSaved(function ($replica): void {
-                        $replica->name = $replica->name.' '.__('fin-mail::fin-mail.theme.replicate_suffix');
+                    ->excludeAttributes(['is_default', 'templates_count'])
+                    ->mutateRecordDataUsing(function (array $data): array {
+                        $data['name'] = $data['name'].' '.__('fin-mail::fin-mail.theme.replicate_suffix');
+
+                        return $data;
+                    })
+                    ->schema([
+                        TextInput::make('name')
+                            ->label(__('fin-mail::fin-mail.theme.fields.name'))
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->beforeReplicaSaved(function ($replica, array $data): void {
+                        $replica->name = $data['name'];
                         $replica->is_default = false;
+                    })
+                    ->after(function ($replica) {
+                        return redirect(EmailThemeResource::getUrl('edit', ['record' => $replica]));
                     }),
                 DeleteAction::make()
                     ->before(function ($record): void {
