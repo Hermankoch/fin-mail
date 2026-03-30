@@ -47,15 +47,18 @@ class EmailThemeForm
                     ->schema([
                         ColorPicker::make('colors.background')
                             ->label(__('fin-mail::fin-mail.theme.fields.page_background'))
-                            ->default($defaultColors['background']),
+                            ->default($defaultColors['background'])
+                            ->live(),
 
                         ColorPicker::make('colors.content_bg')
                             ->label(__('fin-mail::fin-mail.theme.fields.content_background'))
-                            ->default($defaultColors['content_bg']),
+                            ->default($defaultColors['content_bg'])
+                            ->live(),
 
                         ColorPicker::make('colors.border')
                             ->label(__('fin-mail::fin-mail.theme.fields.border'))
-                            ->default($defaultColors['border']),
+                            ->default($defaultColors['border'])
+                            ->live(),
                     ])
                     ->columns(3),
 
@@ -64,19 +67,23 @@ class EmailThemeForm
                     ->schema([
                         ColorPicker::make('colors.heading')
                             ->label(__('fin-mail::fin-mail.theme.fields.headings'))
-                            ->default($defaultColors['heading']),
+                            ->default($defaultColors['heading'])
+                            ->live(),
 
                         ColorPicker::make('colors.text')
                             ->label(__('fin-mail::fin-mail.theme.fields.body_text'))
-                            ->default($defaultColors['text']),
+                            ->default($defaultColors['text'])
+                            ->live(),
 
                         ColorPicker::make('colors.text_light')
                             ->label(__('fin-mail::fin-mail.theme.fields.secondary_text'))
-                            ->default($defaultColors['text_light']),
+                            ->default($defaultColors['text_light'])
+                            ->live(),
 
                         ColorPicker::make('colors.link')
                             ->label(__('fin-mail::fin-mail.theme.fields.links'))
-                            ->default($defaultColors['link']),
+                            ->default($defaultColors['link'])
+                            ->live(),
                     ])
                     ->columns(4),
 
@@ -85,15 +92,18 @@ class EmailThemeForm
                     ->schema([
                         ColorPicker::make('colors.button_bg')
                             ->label(__('fin-mail::fin-mail.theme.fields.button_background'))
-                            ->default($defaultColors['button_bg']),
+                            ->default($defaultColors['button_bg'])
+                            ->live(),
 
                         ColorPicker::make('colors.button_text')
                             ->label(__('fin-mail::fin-mail.theme.fields.button_text'))
-                            ->default($defaultColors['button_text']),
+                            ->default($defaultColors['button_text'])
+                            ->live(),
 
                         ColorPicker::make('colors.primary')
                             ->label(__('fin-mail::fin-mail.theme.fields.primary_accent'))
-                            ->default($defaultColors['primary']),
+                            ->default($defaultColors['primary'])
+                            ->live(),
                     ])
                     ->columns(3),
 
@@ -102,11 +112,13 @@ class EmailThemeForm
                     ->schema([
                         ColorPicker::make('colors.footer_bg')
                             ->label(__('fin-mail::fin-mail.theme.fields.footer_background'))
-                            ->default($defaultColors['footer_bg']),
+                            ->default($defaultColors['footer_bg'])
+                            ->live(),
 
                         ColorPicker::make('colors.footer_text')
                             ->label(__('fin-mail::fin-mail.theme.fields.footer_text'))
-                            ->default($defaultColors['footer_text']),
+                            ->default($defaultColors['footer_text'])
+                            ->live(),
                     ])
                     ->columns(2),
 
@@ -114,8 +126,8 @@ class EmailThemeForm
                     ->schema([
                         TextEntry::make('preview')
                             ->label('')
-                            ->state(fn ($record) => view('fin-mail::components.theme-preview', [
-                                'theme' => $record?->resolvedColors() ?? $defaultColors,
+                            ->state(fn (callable $get) => view('fin-mail::components.theme-preview', [
+                                'theme' => array_merge($defaultColors, array_filter($get('colors') ?? [])),
                             ]))
                             ->columnSpanFull(),
                     ])
