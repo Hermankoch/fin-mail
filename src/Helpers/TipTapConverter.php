@@ -47,17 +47,12 @@ class TipTapConverter
      * mapping each to its {{ id }} token representation.
      *
      * @param  array<string, mixed>  $document
+     *
      * @return array<string, string>
      */
     protected static function extractMergeTagIds(array $document): array
     {
         $tags = [];
-
-        array_walk_recursive($document, function (mixed $value, string|int $key) use (&$tags): void {
-            if ($key === 'id' || $key === 'type') {
-                return;
-            }
-        });
 
         // Walk nodes to find mergeTag types
         static::walkNodes($document, function (array $node) use (&$tags): void {

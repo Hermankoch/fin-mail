@@ -12,11 +12,11 @@ use Filament\Schemas\Schema;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use FinityLabs\FinMail\Actions\EmailSender;
+use FinityLabs\FinMail\Helpers\TipTapConverter;
 use FinityLabs\FinMail\Models\EmailTemplate;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\EmailTemplateResource;
 use FinityLabs\FinMail\Resources\EmailTemplateResource\Schemas\ComposeEmailForm;
 use FinityLabs\FinMail\Settings\GeneralSettings;
-use FinityLabs\FinMail\Helpers\TipTapConverter;
 
 /**
  * Full-page compose screen.
