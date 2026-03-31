@@ -1,5 +1,5 @@
 {
-    "name": "finity-labs/fin-mail",
+    "name": "hermankoch/fin-mail",
     "description": "A powerful email template manager and composer for Filament with dynamic token replacement, template versioning, and inline email sending.",
     "keywords": [
         "laravel",
