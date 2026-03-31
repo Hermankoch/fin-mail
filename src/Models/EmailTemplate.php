@@ -224,7 +224,7 @@ class EmailTemplate extends Model
      *
      * @param  array<string, string>  $theme
      */
-    protected static function renderCustomBlocks(string $html, array $theme): string
+    public static function renderCustomBlocks(string $html, array $theme): string
     {
         $blocks = [
             'emailButton' => ButtonBlock::class,
@@ -279,10 +279,13 @@ class EmailTemplate extends Model
 
         // Cleanup old versions beyond max
         $max = config('fin-mail.versioning.max_versions', 50);
-        $this->versions()
+        $keepIds = $this->versions()
             ->orderByDesc('version')
-            ->skip($max)
-            ->take(PHP_INT_MAX)
+            ->limit($max)
+            ->pluck('id');
+
+        $this->versions()
+            ->whereNotIn('id', $keepIds)
             ->delete();
 
         return $version;

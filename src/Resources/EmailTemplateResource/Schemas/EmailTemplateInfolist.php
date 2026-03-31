@@ -7,6 +7,7 @@ namespace FinityLabs\FinMail\Resources\EmailTemplateResource\Schemas;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -49,10 +50,10 @@ class EmailTemplateInfolist
                                 ->columnSpanFull()
                                 ->placeholder('-'),
 
-                            TextEntry::make('body')
-                                ->label(__('fin-mail::fin-mail.template.fields.body'))
-                                ->html()
-                                ->columnSpanFull(),
+                            // ViewEntry::make('body')
+                            //     ->label(__('fin-mail::fin-mail.template.fields.body'))
+                            //     ->view('fin-mail::infolists.components.body-preview')
+                            //     ->columnSpanFull(),
                         ])
                         ->columns(2),
 

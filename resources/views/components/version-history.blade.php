@@ -9,7 +9,7 @@
                     </span>
                 </div>
                 <div class="text-xs text-gray-500 mt-1">
-                    Subject: <span class="text-gray-700 dark:text-gray-300">{{ \Illuminate\Support\Str::limit($version->subject, 60) }}</span>
+                    Subject: <span class="text-gray-700 dark:text-gray-300">{{ \Illuminate\Support\Str::limit($version->subject[app()->getLocale()] ?? collect($version->subject)->first() ?? '', 60) }}</span>
                 </div>
                 @if($version->createdBy)
                     <div class="text-xs text-gray-400 mt-0.5">

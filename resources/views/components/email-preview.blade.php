@@ -27,6 +27,11 @@
         'customer_service_phone' => $brandingSettings->customer_service_phone,
     ];
 
+    // Render custom blocks (e.g. buttons) in stored HTML
+    if (is_string($content) && str_contains($content, 'data-type="customBlock"')) {
+        $content = \FinityLabs\FinMail\Models\EmailTemplate::renderCustomBlocks($content, $resolvedTheme);
+    }
+
     // Render through the full email layout
     $fullHtml = $content
         ? view('fin-mail::email.default', [
