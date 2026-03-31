@@ -153,8 +153,8 @@ class EditEmailTemplate extends EditRecord
                                             ->requiresConfirmation()
                                             ->modalHeading(__('fin-mail::fin-mail.template.versioning.restore'))
                                             ->modalDescription(__('fin-mail::fin-mail.template.versioning.restore_confirm', ['version' => $record->version]))
+                                            ->cancelParentActions()
                                             ->action(function () use ($record) {
-                                                $this->record->saveVersion(auth()->id());
                                                 $this->record->restoreVersion($record->version);
                                                 $this->fillForm();
 
